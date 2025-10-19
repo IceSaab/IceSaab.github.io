@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>آئس کریم سیلز مینیجر - Online Ready</title>
+<style>
+/* (Compact styles - responsive & modern) */
+:root{--bg1:#667eea;--bg2:#764ba2;--accent:#0984e3;--green:#00b894;--danger:#d63031}
+*{box-sizing:border-box;font-family:Segoe UI, Tahoma, Verdana, sans-serif}
+body{margin:0;min-height:100vh;background:linear-gradient(135deg,var(--bg1),var(--bg2));padding:18px}
+.container{max-width:1200px;margin:0 auto;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,0.15)}
+.header{padding:20px;text-align:center;background:linear-gradient(90deg,#ff6b6b,#ee5a24);color:#fff}
+.header h1{margin:0;font-size:1.6rem}
+.topbar{display:flex;gap:10px;justify-content:center;padding:12px;background:#f7f9fb}
+.btn{padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-ghost{background:transparent;border:2px solid #eee}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;padding:16px}
+.card{background:linear-gradient(90deg,#fff,#f8f9fa);padding:12px;border-radius:10px;text-align:center}
+.table-wrap{overflow:auto;padding:16px;background:#fff}
+table{width:100%;border-collapse:collapse}
+th,td{padding:8px;border-bottom:1px solid #eee;text-align:center}
+.input{padding:8px;width:100%;border-radius:6px;border:1px solid #ddd;text-align:center}
+.footer{padding:18px;text-align:center;background:#f1f4f8}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:999}
+.modal .box{background:#fff;padding:18px;border-radius:10px;max-width:720px;width:95%}
+.flex{display:flex;gap:8px;align-items:center}
+.rtl{text-align:right}
+.small{font-size:0.9rem;color:#555}
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#f1f2f6}
+@media(max-width:720px){.summary{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container" id="app" style="display:none">
+  <div class="header">
+    <h1>🍦 آئس کریم سیلز مینیجر (Online Ready)</h1>
+    <div class="small">LocalStorage-based; GitHub Pages / Netlify پر سیدھا چل جائے گا</div>
+  </div>
+
+  <div class="topbar">
+    <button class="btn btn-primary" onclick="openExpenses()">📊 اخراجات</button>
+    <button class="btn btn-primary" onclick="openHandedOver()">🤝 ہینڈڈ اوور</button>
+    <button class="btn btn-ghost" onclick="exportPDF()">📄 پرنٹ / PDF</button>
+    <select id="shopSelect" class="input" style="max-width:220px" onchange="switchShop(this.value)">
+      <option value="delhi">دہلی گیٹ</option>
+      <option value="shahalam">شاہ عالم</option>
+      <option value="lohari">لوہاری گیٹ</option>
+      <option value="bilal">بلال گنج</option>
+    </select>
+  </div>
+
+  <div class="summary">
+    <div class="card">
+      <div class="small">کل ہینڈڈ اوور کیش</div>
+      <div id="totalHanded" style="font-weight:800">0 روپے</div>
+    </div>
+    <div class="card">
+      <div class="small">موجودہ کیش ان ہینڈ</div>
+      <div id="cashInHand" style="font-weight:800">0 روپے</div>
+    </div>
+    <div class="card">
+      <div class="small">آئس کریم خریداری پینڈنگ</div>
+      <div id="pendingPurchase" style="font-weight:800">0 روپے</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table id="productsTable">
+      <thead>
+        <tr><th>آئس کریم</th><th>پرانا وزن (گرام)</th><th>نیا وزن (گرام)</th><th>سیل ہوئی (گرام)</th><th>موجودہ وزن</th></tr>
+      </thead>
+      <tbody id="productsBody"></tbody>
+    </table>
+  </div>
+
+  <div class="table-wrap" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <div style="flex:1;min-width:220px">
+      <label class="small">ٹوٹل کیش (روپے)</label>
+      <input id="totalCash" class="input" type="number" oninput="updateComparison()" />
+    </div>
+    <div>
+      <button class="btn btn-primary" onclick="autoCalc()">🔢 Auto</button>
+    </div>
+    <div style="flex:1;min-width:220px">
+      <div id="comparison" class="badge">کیش درج کریں</div>
+    </div>
+    <div>
+      <button class="btn btn-primary" id="saveBtn" onclick="saveData()" disabled>💾 Save</button>
+    </div>
+  </div>
+
+  <div style="padding:12px">
+    <div class="small">نوٹس: یہ فائل براہِ راست GitHub Pages / Netlify پر ہوسٹ کی جا سکتی ہے۔ ہر یوزر کا ڈیٹا ان کے براؤزر میں محفوظ ہوگا (localStorage)</div>
+  </div>
+
+  <div class="footer small">Developed for quick online deploy — Hassan</div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal" id="loginModal" style="display:flex">
+  <div class="box rtl">
+    <h3>🍦 لاگ ان کریں</h3>
+    <div class="flex">
+      <input id="loginId" class="input" placeholder="ID درج کریں" />
+      <input id="loginPass" class="input" placeholder="Password" type="password"/>
+      <button class="btn btn-primary" onclick="doLogin()">لاگ ان</button>
+    </div>
+    <div class="small">Demo credentials: ID = <b>03237131918</b> | Password = <b>Saab</b></div>
+  </div>
+</div>
+
+<!-- Expenses Modal -->
+<div class="modal" id="expenseModal">
+  <div class="box rtl">
+    <h3>اخراجات درج کریں</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <input id="rent" class="input" placeholder="شاپ کرایہ (روپے)"/>
+      <input id="electric" class="input" placeholder="بجلی کا بل"/>
+      <input id="salary" class="input" placeholder="ملازمین کی تنخواہ"/>
+      <input id="purchase" class="input" placeholder="آئس کریم خریداری کل رقم"/>
+      <input id="paid" class="input" placeholder="آئس کریم پیڈ رقم"/>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <button class="btn btn-primary" onclick="submitExpenses()">جمع کریں</button>
+      <button class="btn" onclick="closeExpenses()">منسوخ</button>
+    </div>
+  </div>
+</div>
+
+<!-- HandedOver Modal -->
+<div class="modal" id="handedModal">
+  <div class="box rtl">
+    <h3>ہینڈڈ اوور درج کریں</h3>
+    <div style="display:flex;gap:8px">
+      <input id="handedDate" type="date" class="input"/>
+      <input id="handedAmount" type="number" class="input" placeholder="رقم (روپے)"/>
+      <input id="handedNote" class="input" placeholder="تفصیل (اختیاری)"/>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <button class="btn btn-primary" onclick="submitHanded()">جمع کریں</button>
+      <button class="btn" onclick="closeHanded()">منسوخ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// --- Core data structures ---
+const shops = {
+  delhi:{name:"دہلی گیٹ", products:["پستہ بادام","سٹرابری","چاکلیٹ","ٹوٹی فروٹی","مینگو","بلیوبیری","پائن ایپل","ونیلا","اوریو","قلفہ"]},
+  shahalam:{name:"شاہ عالم", products:[]},
+  lohari:{name:"لوہاری گیٹ", products:[]},
+  bilal:{name:"بلال گنج", products:[]}
+};
+// copy product lists into other shops
+Object.keys(shops).forEach(k=>{ if(shops[k].products.length===0) shops[k].products=shops.delhi.products.slice() });
+
+let currentShop = 'delhi';
+let salesData = {}; // salesData[shop] = [{oldWeight, newWeight, sold, calcCurrent},...]
+let expenses = {}; // expenses[shop] = {...}
+let handed = []; // array of handed records
+
+// --- Utilities ---
+function uid(){ return 'ice_'+Date.now()+'_'+Math.floor(Math.random()*9999) }
+function saveToLocal(){ localStorage.setItem('ice_app_saved', JSON.stringify({salesData,expenses,handed})) }
+function loadFromLocal(){ const d = localStorage.getItem('ice_app_saved'); if(d){ const parsed=JSON.parse(d); salesData=parsed.salesData||{}; expenses=parsed.expenses||{}; handed=parsed.handed||[] } }
+
+// --- Login ---
+function doLogin(){
+  const id=document.getElementById('loginId').value.trim();
+  const p=document.getElementById('loginPass').value;
+  if(id==='03237131918' && p==='Saab'){ document.getElementById('loginModal').style.display='none'; document.getElementById('app').style.display='block'; init(); }
+  else alert('غلط آئی ڈی یا پاس ورڈ');
+}
+
+// --- Initialize UI & data ---
+function init(){
+  loadFromLocal();
+  renderProducts();
+  updateSummary();
+  document.getElementById('saveBtn').disabled=false;
+}
+
+// switch shop
+function switchShop(val){
+  currentShop=val;
+  renderProducts();
+  updateSummary();
+}
+
+function renderProducts(){
+  const tbody=document.getElementById('productsBody'); tbody.innerHTML='';
+  if(!salesData[currentShop]) salesData[currentShop]=shops[currentShop].products.map(_=>({oldWeight:0,newWeight:0,sold:0,calcCurrent:0}));
+  salesData[currentShop].forEach((p,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${shops[currentShop].products[i]}</td>
+      <td><input class="input" value="${p.oldWeight}" data-i="${i}" onchange="onOldChange(this)" /></td>
+      <td><input class="input" value="${p.newWeight}" data-i="${i}" onchange="onNewChange(this)" /></td>
+      <td><input class="input" value="${p.sold}" data-i="${i}" onchange="onSoldChange(this)"/></td>
+      <td id="cur_${i}">${p.calcCurrent||0}</td>`;
+    tbody.appendChild(tr);
+  });
+  updateComparison();
+}
+
+// input handlers
+function onOldChange(el){ const i=+el.dataset.i; salesData[currentShop][i].oldWeight=+el.value||0; recalc(i); saveToLocal(); updateSummary(); }
+function onNewChange(el){ const i=+el.dataset.i; salesData[currentShop][i].newWeight=+el.value||0; recalc(i); saveToLocal(); updateSummary(); }
+function onSoldChange(el){ const i=+el.dataset.i; salesData[currentShop][i].sold=+el.value||0; recalc(i); saveToLocal(); updateSummary(); }
+
+function recalc(i){
+  const item = salesData[currentShop][i];
+  item.calcCurrent = (item.oldWeight||0) + (item.newWeight||0) - (item.sold||0);
+  document.getElementById('cur_'+i).textContent = item.calcCurrent;
+}
+
+// auto-calc cash from sold grams (1g = 1 unit)
+function autoCalc(){
+  const total = salesData[currentShop].reduce((s,p)=>s + (p.sold||0),0);
+  document.getElementById('totalCash').value = total;
+  updateComparison();
+}
+
+// comparison
+function updateComparison(){
+  const totalCash = +document.getElementById('totalCash').value || 0;
+  const totalSale = salesData[currentShop] ? salesData[currentShop].reduce((s,p)=>s + (p.sold||0),0) : 0;
+  const diff = totalCash - totalSale;
+  const cmp = document.getElementById('comparison');
+  if(totalCash===0) cmp.textContent='کیش درج کریں';
+  else if(diff===0) cmp.textContent='✅ کیش بالکل صحیح ہے';
+  else if(diff>0) cmp.textContent='➕ '+diff+' روپے زیادہ';
+  else cmp.textContent='➖ '+Math.abs(diff)+' روپے کم';
+}
+
+// save
+function saveData(){
+  const record = {
+    type:'sale',
+    shop: currentShop,
+    shopName: shops[currentShop].name,
+    date: new Date().toISOString(),
+    salesData: JSON.parse(JSON.stringify(salesData[currentShop])),
+    totalSale: salesData[currentShop].reduce((s,p)=>s + (p.sold||0),0),
+    timestamp: Date.now(),
+    key: uid()
+  };
+  // push into local storage array
+  let arr = JSON.parse(localStorage.getItem('ice_records')||'[]');
+  arr.push(record);
+  localStorage.setItem('ice_records', JSON.stringify(arr));
+  saveToLocal();
+  alert('ڈیٹا محفوظ ہوگیا!');
+  updateSummary();
+}
+
+// expenses modal
+function openExpenses(){ document.getElementById('expenseModal').style.display='flex' }
+function closeExpenses(){ document.getElementById('expenseModal').style.display='none' }
+function submitExpenses(){
+  if(!expenses[currentShop]) expenses[currentShop]={rent:0,electric:0,salary:0,purchase:0,paid:0,others:[]};
+  expenses[currentShop].rent = +document.getElementById('rent').value || 0;
+  expenses[currentShop].electric = +document.getElementById('electric').value || 0;
+  expenses[currentShop].salary = +document.getElementById('salary').value || 0;
+  expenses[currentShop].purchase = +document.getElementById('purchase').value || 0;
+  expenses[currentShop].paid = +document.getElementById('paid').value || 0;
+  saveToLocal();
+  closeExpenses();
+  alert('اخراجات محفوظ ہوگئے');
+  updateSummary();
+}
+
+// handed over
+function openHandedOver(){ document.getElementById('handedModal').style.display='flex' }
+function closeHanded(){ document.getElementById('handedModal').style.display='none' }
+function submitHanded(){
+  const d=document.getElementById('handedDate').value || new Date().toISOString().split('T')[0];
+  const amt= +document.getElementById('handedAmount').value || 0;
+  const note=document.getElementById('handedNote').value || '';
+  if(amt<=0){ alert('صحیح رقم درج کریں'); return; }
+  handed.push({date:d,amount:amt,note,shop:currentShop,key:uid()});
+  saveToLocal();
+  closeHanded();
+  alert('ہینڈڈ اوور محفوظ ہوگیا');
+  updateSummary();
+}
+
+// summary
+function updateSummary(){
+  // total handed for current shop
+  const th = handed.filter(h=>h.shop===currentShop).reduce((s,h)=>s+h.amount,0);
+  document.getElementById('totalHanded').textContent = th + ' روپے';
+  // cash in hand - sum of last saved totalCash for this shop from records (approx)
+  const recs = JSON.parse(localStorage.getItem('ice_records')||'[]').filter(r=>r.shop===currentShop);
+  const lastTotal = recs.length ? recs[recs.length-1].totalSale : 0;
+  document.getElementById('cashInHand').textContent = lastTotal + ' روپے';
+  // pending purchase
+  const shopExp = expenses[currentShop] || {purchase:0,paid:0};
+  const pending = (shopExp.purchase || 0) - (shopExp.paid || 0);
+  document.getElementById('pendingPurchase').textContent = pending + ' روپے';
+}
+
+// export / print
+function exportPDF(){ window.print(); }
+
+// load saved app state on startup
+(function(){
+  loadFromLocal();
+  // show login modal by default (already visible)
+})();
+</script>
+</body>
+</html>
