@@ -1,314 +1,3745 @@
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>آئس کریم سیلز مینیجر - Online Ready</title>
-<style>
-/* (Compact styles - responsive & modern) */
-:root{--bg1:#667eea;--bg2:#764ba2;--accent:#0984e3;--green:#00b894;--danger:#d63031}
-*{box-sizing:border-box;font-family:Segoe UI, Tahoma, Verdana, sans-serif}
-body{margin:0;min-height:100vh;background:linear-gradient(135deg,var(--bg1),var(--bg2));padding:18px}
-.container{max-width:1200px;margin:0 auto;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,0.15)}
-.header{padding:20px;text-align:center;background:linear-gradient(90deg,#ff6b6b,#ee5a24);color:#fff}
-.header h1{margin:0;font-size:1.6rem}
-.topbar{display:flex;gap:10px;justify-content:center;padding:12px;background:#f7f9fb}
-.btn{padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-ghost{background:transparent;border:2px solid #eee}
-.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;padding:16px}
-.card{background:linear-gradient(90deg,#fff,#f8f9fa);padding:12px;border-radius:10px;text-align:center}
-.table-wrap{overflow:auto;padding:16px;background:#fff}
-table{width:100%;border-collapse:collapse}
-th,td{padding:8px;border-bottom:1px solid #eee;text-align:center}
-.input{padding:8px;width:100%;border-radius:6px;border:1px solid #ddd;text-align:center}
-.footer{padding:18px;text-align:center;background:#f1f4f8}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:999}
-.modal .box{background:#fff;padding:18px;border-radius:10px;max-width:720px;width:95%}
-.flex{display:flex;gap:8px;align-items:center}
-.rtl{text-align:right}
-.small{font-size:0.9rem;color:#555}
-.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#f1f2f6}
-@media(max-width:720px){.summary{grid-template-columns:1fr}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آئس کریم سیلز مینجمنٹ</title>
+    <!-- لائبریریز شامل کریں -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1rem;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+        
+        .top-options {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .top-btn {
+            background: rgba(255,255,255,0.25);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            min-width: 120px;
+        }
+        
+        .top-btn:hover {
+            background: white;
+            color: #ff6b6b;
+            transform: translateY(-2px);
+        }
+        
+        /* شورٹ سمری سیکشن */
+        .summary-section {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            padding: 20px 15px;
+            border-bottom: 3px solid #00a085;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .summary-card {
+            background: rgba(255,255,255,0.15);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .summary-title {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+        
+        .summary-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+        
+        .cash-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .cash-btn {
+            background: rgba(255,255,255,0.25);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+        
+        .cash-btn:hover {
+            background: white;
+            color: #00b894;
+            transform: translateY(-2px);
+        }
+        
+        .handed-over-section {
+            background: rgba(255,255,255,0.15);
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .handed-over-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .handed-over-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            flex-wrap: wrap;
+        }
+        
+        .handed-over-item:last-child {
+            border-bottom: none;
+        }
+        
+        .edit-entry-btn {
+            background: rgba(255,255,255,0.3);
+            border: 1px solid white;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            margin-right: 8px;
+        }
+        
+        .edit-entry-btn:hover {
+            background: white;
+            color: #00b894;
+        }
+        
+        .date-section {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 3px solid #e9ecef;
+        }
+        
+        .date-section h2 {
+            color: #2d3436;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .current-date {
+            font-size: 1.1rem;
+            color: #e17055;
+            font-weight: bold;
+        }
+        
+        .shop-selector {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .shop-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .shop-btn {
+            background: white;
+            border: none;
+            padding: 12px 8px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2d3436;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+        }
+        
+        .shop-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            border-color: #0984e3;
+        }
+        
+        .shop-btn.active {
+            background: #0984e3;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(9,132,227,0.3);
+        }
+
+        /* شاپ وائز کیش سیکشن */
+        .shop-cash-section {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            padding: 15px;
+            color: white;
+            text-align: center;
+        }
+        
+        .shop-cash-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .shop-cash-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        /* پراڈکٹس ٹیبل - موبائل فرینڈلی */
+        .products-table-container {
+            padding: 15px;
+            background: #f8f9fa;
+            overflow-x: auto;
+            position: relative;
+        }
+        
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            min-width: 800px;
+        }
+        
+        .products-table th {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            color: white;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: 1px solid #e84393;
+        }
+        
+        .products-table td {
+            padding: 10px 8px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+            font-size: 0.85rem;
+        }
+        
+        .products-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .products-table tr:hover {
+            background: #f1f2f6;
+        }
+        
+        .product-name-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #2d3436;
+            position: sticky;
+            left: 0;
+            background: white;
+            z-index: 2;
+            border-right: 2px solid #e9ecef;
+            min-width: 120px;
+        }
+        
+        .product-icon {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 8px 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            background: white;
+            text-align: center;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #74b9ff;
+            box-shadow: 0 0 0 3px rgba(116,185,255,0.1);
+            background: #e3f2fd;
+            transform: scale(1.02);
+        }
+        
+        .old-weight {
+            background: #f8f9fa;
+            color: #636e72;
+            font-weight: 600;
+        }
+        
+        .edit-weight-btn {
+            background: #74b9ff;
+            color: white;
+            border: none;
+            padding: 5px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            margin-top: 4px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .edit-weight-btn:hover {
+            background: #0984e3;
+        }
+        
+        .result-value {
+            font-weight: 600;
+            color: #2d3436;
+        }
+        
+        .view-entries-btn {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .view-entries-btn:hover {
+            background: linear-gradient(135deg, #6c5ce7, #5b4fcf);
+            transform: translateY(-1px);
+        }
+        
+        .cash-section {
+            background: linear-gradient(135deg, #dfe6e9, #b2bec3);
+            padding: 20px 15px;
+            border-top: 4px solid #a4b0be;
+        }
+        
+        .cash-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .cash-label {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d3436;
+        }
+        
+        .cash-input {
+            padding: 10px 15px;
+            border: 2px solid #74b9ff;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 100%;
+            max-width: 280px;
+            text-align: center;
+            background: white;
+            font-weight: 600;
+        }
+        
+        .cash-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(116,185,255,0.2);
+        }
+        
+        .auto-cash-btn {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 280px;
+        }
+        
+        .auto-cash-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .cash-comparison {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 2px solid #e9ecef;
+        }
+        
+        .comparison-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2d3436;
+            margin-bottom: 12px;
+        }
+        
+        .comparison-result {
+            font-size: 1.1rem;
+            font-weight: 800;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 8px 0;
+        }
+        
+        .comparison-positive {
+            background: #d1f7e4;
+            color: #00b894;
+            border: 2px solid #00b894;
+        }
+        
+        .comparison-negative {
+            background: #ffe0e0;
+            color: #d63031;
+            border: 2px solid #d63031;
+        }
+        
+        .comparison-equal {
+            background: #f8f9fa;
+            color: #636e72;
+            border: 2px solid #b2bec3;
+        }
+        
+        .save-btn {
+            background: linear-gradient(135deg, #0984e3, #074b93);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 280px;
+        }
+        
+        .save-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .save-btn:disabled {
+            background: #b2bec3;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* مودل اسٹائلز */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            padding: 10px;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 95%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #f1f2f6;
+        }
+        
+        .modal-title {
+            font-size: 1.4rem;
+            color: #2d3436;
+            font-weight: 800;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #636e72;
+            transition: color 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            color: #d63031;
+        }
+        
+        .expense-form {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .expense-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .expense-input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .expense-label {
+            margin-bottom: 6px;
+            font-weight: 700;
+            color: #2d3436;
+            font-size: 1rem;
+        }
+        
+        .expense-input {
+            padding: 10px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .expense-input:focus {
+            outline: none;
+            border-color: #74b9ff;
+        }
+        
+        .other-expenses-list {
+            grid-column: 1 / -1;
+        }
+        
+        .expense-item {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+        
+        .expense-item input {
+            flex: 1;
+        }
+        
+        .add-expense-btn {
+            background: #74b9ff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .submit-expense {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.3s ease;
+            grid-column: 1 / -1;
+        }
+        
+        .submit-expense:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* رپورٹ اسٹائلز */
+        .report-controls {
+            background: #f8f9fa;
+            padding: 15px;
+            border-bottom: 3px solid #e9ecef;
+        }
+        
+        .report-filters {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .filter-label {
+            font-weight: 600;
+            color: #2d3436;
+            font-size: 0.9rem;
+        }
+        
+        .filter-select {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .report-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .report-btn {
+            background: linear-gradient(135deg, #0984e3, #074b93);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .report-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.8rem;
+        }
+        
+        .report-table th,
+        .report-table td {
+            padding: 8px 10px;
+            text-align: right;
+            border: 1px solid #ddd;
+        }
+        
+        .report-table th {
+            background: #f8f9fa;
+            font-weight: 700;
+            color: #2d3436;
+        }
+        
+        .report-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .profit-positive {
+            color: #00b894;
+            font-weight: bold;
+        }
+        
+        .profit-negative {
+            color: #d63031;
+            font-weight: bold;
+        }
+        
+        /* لاگ ان مودل */
+        .login-modal {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+        }
+        
+        .login-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 350px;
+            margin: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        .login-title {
+            font-size: 1.8rem;
+            color: #2d3436;
+            margin-bottom: 25px;
+            font-weight: 800;
+        }
+        
+        .login-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .login-input:focus {
+            outline: none;
+            border-color: #74b9ff;
+        }
+        
+        .login-btn {
+            background: linear-gradient(135deg, #0984e3, #074b93);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .error-message {
+            color: #d63031;
+            margin-top: 8px;
+            font-weight: 600;
+            display: none;
+        }
+        
+        /* وزن ایڈٹ مودل */
+        .edit-weight-modal {
+            display: none;
+        }
+        
+        .edit-weight-content {
+            max-width: 400px;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: center;
+        }
+        
+        .edit-weight-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        .confirm-btn {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        .cancel-btn {
+            background: linear-gradient(135deg, #636e72, #2d3436);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        /* ہینڈڈ اوور مودل */
+        .handed-over-modal {
+            display: none;
+        }
+        
+        .handed-over-form {
+            display: grid;
+            gap: 12px;
+        }
+        
+        /* پراڈکٹ انٹریز مودل */
+        .product-entries-modal {
+            display: none;
+        }
+        
+        .product-entries-content {
+            max-width: 95%;
+        }
+        
+        .entries-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.8rem;
+        }
+        
+        .entries-table th,
+        .entries-table td {
+            padding: 8px 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        .entries-table th {
+            background: #f8f9fa;
+            font-weight: 700;
+            color: #2d3436;
+        }
+        
+        .entries-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .edit-entry-btn-small {
+            background: #74b9ff;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+            margin: 2px;
+        }
+        
+        .edit-entry-btn-small:hover {
+            background: #0984e3;
+        }
+        
+        .delete-entry-btn {
+            background: #ff7675;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+            margin: 2px;
+        }
+        
+        .delete-entry-btn:hover {
+            background: #d63031;
+        }
+        
+        /* تمام ڈیلیٹ مودل */
+        .delete-all-modal {
+            display: none;
+        }
+        
+        .delete-all-content {
+            max-width: 400px;
+        }
+        
+        .ice-cream-purchase-section {
+            grid-column: 1 / -1;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+        
+        .purchase-status {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .purchase-status span {
+            font-weight: 600;
+            color: #2d3436;
+            font-size: 0.9rem;
+        }
+        
+        .purchase-pending {
+            color: #e17055;
+        }
+        
+        .purchase-paid {
+            color: #00b894;
+        }
+
+        /* موبائل اسپیسفک اسٹائلز */
+        .mobile-only {
+            display: block;
+        }
+        
+        .desktop-only {
+            display: none;
+        }
+        
+        .mobile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .mobile-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        /* لوڈنگ اسپنر */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .loading-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* نوٹیفکیشن */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #00b894;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 10000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        /* فاسٹ انٹری ہائی لائٹ */
+        .current-input {
+            background: #fff3e0 !important;
+            border-color: #ff9800 !important;
+        }
+
+        /* موبائل پر آئس کریم کے نام نیچے دکھانے کے لیے */
+        @media (max-width: 768px) {
+            .products-table th:first-child,
+            .products-table td:first-child {
+                position: sticky;
+                left: 0;
+                background: #fd79a8;
+                color: white;
+                z-index: 3;
+                min-width: 120px;
+            }
+            
+            .products-table td:first-child {
+                background: white;
+                border-right: 2px solid #e9ecef;
+            }
+            
+            .product-name-cell {
+                flex-direction: column;
+                gap: 4px;
+                text-align: center;
+                padding: 8px 4px;
+            }
+            
+            .product-icon {
+                width: 25px;
+                height: 25px;
+                font-size: 0.8rem;
+            }
+            
+            /* نیا وزن اور موجودہ وزن کے کالم میں آئس کریم کا نام دکھانے کے لیے */
+            .products-table td:nth-child(3)::before,
+            .products-table td:nth-child(4)::before {
+                content: attr(data-product-name);
+                display: block;
+                font-size: 0.7rem;
+                color: #636e72;
+                font-weight: 600;
+                margin-bottom: 4px;
+                background: #f8f9fa;
+                padding: 2px 4px;
+                border-radius: 3px;
+                border: 1px solid #e9ecef;
+            }
+            
+            .input-field {
+                font-size: 16px; /* موبائل پر زوم سے بچنے کے لیے */
+                padding: 10px 8px;
+            }
+        }
+
+        /* چھوٹے موبائل ڈیوائسز کے لیے اضافی اسٹائلز */
+        @media (max-width: 480px) {
+            .products-table {
+                font-size: 0.75rem;
+            }
+            
+            .products-table th,
+            .products-table td {
+                padding: 6px 4px;
+            }
+            
+            .product-name-cell {
+                min-width: 100px;
+            }
+            
+            .input-field {
+                padding: 8px 6px;
+                font-size: 14px;
+            }
+            
+            .edit-weight-btn,
+            .view-entries-btn {
+                font-size: 0.65rem;
+                padding: 4px 6px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .mobile-only {
+                display: none;
+            }
+            
+            .desktop-only {
+                display: block;
+            }
+            
+            .shop-buttons {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .expense-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .report-filters {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .report-actions {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .cash-input-group {
+                flex-direction: row;
+            }
+            
+            .cash-input {
+                width: 200px;
+            }
+            
+            .auto-cash-btn {
+                width: auto;
+            }
+            
+            .top-options {
+                position: absolute;
+                left: 25px;
+                top: 50%;
+                transform: translateY(-50%);
+                margin-top: 0;
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .header p {
+                font-size: 0.9rem;
+            }
+            
+            .top-btn, .cash-btn {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+                min-width: 130px;
+            }
+            
+            .summary-value {
+                font-size: 1.2rem;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .modal-title {
+                font-size: 1.2rem;
+            }
+            
+            .input-field {
+                padding: 12px 8px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .products-table th:first-child,
+            .products-table td:first-child {
+                position: sticky;
+                left: 0;
+                background: #fd79a8;
+                color: white;
+                z-index: 3;
+            }
+            
+            .products-table td:first-child {
+                background: white;
+                border-right: 2px solid #e9ecef;
+            }
+            
+            .products-table tr:focus-within {
+                background: #e3f2fd !important;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container" id="app" style="display:none">
-  <div class="header">
-    <h1>🍦 آئس کریم سیلز مینیجر (Online Ready)</h1>
-    <div class="small">LocalStorage-based; GitHub Pages / Netlify پر سیدھا چل جائے گا</div>
-  </div>
-
-  <div class="topbar">
-    <button class="btn btn-primary" onclick="openExpenses()">📊 اخراجات</button>
-    <button class="btn btn-primary" onclick="openHandedOver()">🤝 ہینڈڈ اوور</button>
-    <button class="btn btn-ghost" onclick="exportPDF()">📄 پرنٹ / PDF</button>
-    <select id="shopSelect" class="input" style="max-width:220px" onchange="switchShop(this.value)">
-      <option value="delhi">دہلی گیٹ</option>
-      <option value="shahalam">شاہ عالم</option>
-      <option value="lohari">لوہاری گیٹ</option>
-      <option value="bilal">بلال گنج</option>
-    </select>
-  </div>
-
-  <div class="summary">
-    <div class="card">
-      <div class="small">کل ہینڈڈ اوور کیش</div>
-      <div id="totalHanded" style="font-weight:800">0 روپے</div>
+    <!-- لوڈنگ اسپنر -->
+    <div class="loading-overlay" id="loadingSpinner">
+        <div class="loading-spinner"></div>
+        <p>لوڈ ہو رہا ہے...</p>
     </div>
-    <div class="card">
-      <div class="small">موجودہ کیش ان ہینڈ</div>
-      <div id="cashInHand" style="font-weight:800">0 روپے</div>
+
+    <!-- لاگ ان مودل -->
+    <div id="loginModal" class="modal login-modal" style="display: flex;">
+        <div class="login-content">
+            <h2 class="login-title">🍦 لاگ ان کریں</h2>
+            <input type="text" id="userId" class="login-input" placeholder="آئی ڈی درج کریں">
+            <input type="password" id="password" class="login-input" placeholder="پاس ورڈ درج کریں">
+            <button class="login-btn" onclick="login()">لاگ ان کریں</button>
+            <div class="error-message" id="loginError">غلط آئی ڈی یا پاس ورڈ!</div>
+        </div>
     </div>
-    <div class="card">
-      <div class="small">آئس کریم خریداری پینڈنگ</div>
-      <div id="pendingPurchase" style="font-weight:800">0 روپے</div>
+
+    <!-- وزن ایڈٹ مودل -->
+    <div id="editWeightModal" class="modal edit-weight-modal">
+        <div class="modal-content edit-weight-content">
+            <div class="modal-header">
+                <h2 class="modal-title">پرانا وزن تبدیل کریں</h2>
+                <button class="close-btn" onclick="closeEditWeightModal()">×</button>
+            </div>
+            <div style="text-align: center;">
+                <p style="margin-bottom: 15px; font-size: 1rem;">براہ کرم پاس ورڈ درج کریں:</p>
+                <input type="password" id="editWeightPassword" class="password-input" placeholder="پاس ورڈ">
+                <div class="edit-weight-btns">
+                    <button class="confirm-btn" onclick="confirmEditWeight()">تصدیق کریں</button>
+                    <button class="cancel-btn" onclick="closeEditWeightModal()">منسوخ کریں</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div class="table-wrap">
-    <table id="productsTable">
-      <thead>
-        <tr><th>آئس کریم</th><th>پرانا وزن (گرام)</th><th>نیا وزن (گرام)</th><th>سیل ہوئی (گرام)</th><th>موجودہ وزن</th></tr>
-      </thead>
-      <tbody id="productsBody"></tbody>
-    </table>
-  </div>
-
-  <div class="table-wrap" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-    <div style="flex:1;min-width:220px">
-      <label class="small">ٹوٹل کیش (روپے)</label>
-      <input id="totalCash" class="input" type="number" oninput="updateComparison()" />
+    <!-- ہینڈڈ اوور مودل -->
+    <div id="handedOverModal" class="modal handed-over-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">ہینڈڈ اوور کیش درج کریں</h2>
+                <button class="close-btn" onclick="closeHandedOverModal()">×</button>
+            </div>
+            <div class="handed-over-form">
+                <div class="expense-input-group">
+                    <label class="expense-label">تاریخ</label>
+                    <input type="date" class="expense-input" id="handedOverDate">
+                </div>
+                <div class="expense-input-group">
+                    <label class="expense-label">رقم</label>
+                    <input type="number" class="expense-input" id="handedOverAmount" placeholder="روپے میں">
+                </div>
+                <div class="expense-input-group">
+                    <label class="expense-label">تفصیل</label>
+                    <input type="text" class="expense-input" id="handedOverDescription" placeholder="تفصیل درج کریں">
+                </div>
+                <button class="submit-expense" onclick="submitHandedOver()">ہینڈڈ اوور جمع کریں</button>
+            </div>
+        </div>
     </div>
-    <div>
-      <button class="btn btn-primary" onclick="autoCalc()">🔢 Auto</button>
+
+    <!-- ایڈٹ انٹری مودل -->
+    <div id="editEntryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">انٹری تبدیل کریں</h2>
+                <button class="close-btn" onclick="closeEditEntryModal()">×</button>
+            </div>
+            <div class="handed-over-form">
+                <div class="expense-input-group">
+                    <label class="expense-label">تاریخ</label>
+                    <input type="date" class="expense-input" id="editEntryDate">
+                </div>
+                <div class="expense-input-group">
+                    <label class="expense-label">نیا وزن (گرام)</label>
+                    <input type="number" class="expense-input" id="editEntryNewWeight" placeholder="نیا وزن">
+                </div>
+                <div class="expense-input-group">
+                    <label class="expense-label">موجودہ وزن (گرام)</label>
+                    <input type="number" class="expense-input" id="editEntryCurrentWeight" placeholder="موجودہ وزن">
+                </div>
+                <button class="submit-expense" onclick="updateProductEntry()">انٹری اپڈیٹ کریں</button>
+            </div>
+        </div>
     </div>
-    <div style="flex:1;min-width:220px">
-      <div id="comparison" class="badge">کیش درج کریں</div>
+
+    <!-- ہینڈڈ اوور ایڈٹ مودل -->
+    <div id="editHandedOverModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">ہینڈڈ اوور تبدیل کریں</h2>
+                <button class="close-btn" onclick="closeEditHandedOverModal()">×</button>
+            </div>
+            <div class="handed-over-form">
+                <div class="expense-input-group">
+                    <label class="expense-label">تاریخ</label>
+                    <input type="date" class="expense-input" id="editHandedOverDate">
+                </div>
+                <div class="expense-input-group">
+                    <label class="expense-label">رقم</label>
+                    <input type="number" class="expense-input" id="editHandedOverAmount" placeholder="روپے میں">
+                </div>
+                <div class="expense-input-group">
+                    <label class="expense-label">تفصیل</label>
+                    <input type="text" class="expense-input" id="editHandedOverDescription" placeholder="تفصیل درج کریں">
+                </div>
+                <button class="submit-expense" onclick="updateHandedOverEntry()">ہینڈڈ اوور اپڈیٹ کریں</button>
+            </div>
+        </div>
     </div>
-    <div>
-      <button class="btn btn-primary" id="saveBtn" onclick="saveData()" disabled>💾 Save</button>
+
+    <!-- پراڈکٹ انٹریز مودل -->
+    <div id="productEntriesModal" class="modal product-entries-modal">
+        <div class="modal-content product-entries-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="productEntriesTitle">پراڈکٹ انٹریز</h2>
+                <button class="close-btn" onclick="closeProductEntriesModal()">×</button>
+            </div>
+            <div id="productEntriesContent">
+                <!-- پراڈکٹ انٹریز کا مواد یہاں لوڈ ہوگا -->
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div style="padding:12px">
-    <div class="small">نوٹس: یہ فائل براہِ راست GitHub Pages / Netlify پر ہوسٹ کی جا سکتی ہے۔ ہر یوزر کا ڈیٹا ان کے براؤزر میں محفوظ ہوگا (localStorage)</div>
-  </div>
-
-  <div class="footer small">Developed for quick online deploy — Hassan</div>
-</div>
-
-<!-- Login Modal -->
-<div class="modal" id="loginModal" style="display:flex">
-  <div class="box rtl">
-    <h3>🍦 لاگ ان کریں</h3>
-    <div class="flex">
-      <input id="loginId" class="input" placeholder="ID درج کریں" />
-      <input id="loginPass" class="input" placeholder="Password" type="password"/>
-      <button class="btn btn-primary" onclick="doLogin()">لاگ ان</button>
+    <!-- اخراجات انٹریز مودل -->
+    <div id="expenseEntriesModal" class="modal">
+        <div class="modal-content product-entries-content">
+            <div class="modal-header">
+                <h2 class="modal-title">اخراجات کی انٹریز</h2>
+                <button class="close-btn" onclick="closeExpenseEntriesModal()">×</button>
+            </div>
+            <div id="expenseEntriesContent">
+                <!-- اخراجات انٹریز کا مواد یہاں لوڈ ہوگا -->
+            </div>
+        </div>
     </div>
-    <div class="small">Demo credentials: ID = <b>03237131918</b> | Password = <b>Saab</b></div>
-  </div>
-</div>
 
-<!-- Expenses Modal -->
-<div class="modal" id="expenseModal">
-  <div class="box rtl">
-    <h3>اخراجات درج کریں</h3>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <input id="rent" class="input" placeholder="شاپ کرایہ (روپے)"/>
-      <input id="electric" class="input" placeholder="بجلی کا بل"/>
-      <input id="salary" class="input" placeholder="ملازمین کی تنخواہ"/>
-      <input id="purchase" class="input" placeholder="آئس کریم خریداری کل رقم"/>
-      <input id="paid" class="input" placeholder="آئس کریم پیڈ رقم"/>
+    <!-- ایڈٹ اخراجات مودل -->
+    <div id="editExpenseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">خرچہ تبدیل کریں</h2>
+                <button class="close-btn" onclick="closeEditExpenseModal()">×</button>
+            </div>
+            <div class="expense-form">
+                <div class="expense-grid">
+                    <div class="expense-input-group">
+                        <label class="expense-label">تاریخ</label>
+                        <input type="date" class="expense-input" id="editExpenseDate">
+                    </div>
+                    <div class="expense-input-group">
+                        <label class="expense-label">شاپ کا کرایہ</label>
+                        <input type="number" class="expense-input" id="editShopRent" placeholder="روپے میں">
+                    </div>
+                    <div class="expense-input-group">
+                        <label class="expense-label">بجلی کا بل</label>
+                        <input type="number" class="expense-input" id="editElectricityBill" placeholder="روپے میں">
+                    </div>
+                    <div class="expense-input-group">
+                        <label class="expense-label">ملازمین کی تنخواہ</label>
+                        <input type="number" class="expense-input" id="editSalary" placeholder="روپے میں">
+                    </div>
+                    <div class="expense-input-group">
+                        <label class="expense-label">خریدی گئی آئس کریم</label>
+                        <input type="number" class="expense-input" id="editIceCreamPurchase" placeholder="کل خریداری کی رقم">
+                    </div>
+                    <div class="expense-input-group">
+                        <label class="expense-label">خریدی گئی آئس کریم کی ادائیگی</label>
+                        <input type="number" class="expense-input" id="editIceCreamPaid" placeholder="ادائیگی کی گئی رقم">
+                    </div>
+                </div>
+                
+                <div class="expense-input-group other-expenses-list">
+                    <label class="expense-label">دیگر اخراجات</label>
+                    <div id="editOtherExpensesContainer">
+                        <!-- دیگر اخراجات کے فیلڈز یہاں شامل ہوں گے -->
+                    </div>
+                    <button type="button" class="add-expense-btn" onclick="addEditExpenseField()">+ خرچہ شامل کریں</button>
+                </div>
+                
+                <button class="submit-expense" onclick="updateExpenseEntry()">خرچہ اپڈیٹ کریں</button>
+            </div>
+        </div>
     </div>
-    <div style="margin-top:10px;display:flex;gap:8px">
-      <button class="btn btn-primary" onclick="submitExpenses()">جمع کریں</button>
-      <button class="btn" onclick="closeExpenses()">منسوخ</button>
+
+    <!-- تمام ڈیلیٹ مودل -->
+    <div id="deleteAllModal" class="modal delete-all-modal">
+        <div class="modal-content delete-all-content">
+            <div class="modal-header">
+                <h2 class="modal-title">تمام ڈیٹا ڈیلیٹ کریں</h2>
+                <button class="close-btn" onclick="closeDeleteAllModal()">×</button>
+            </div>
+            <div style="text-align: center;">
+                <p style="margin-bottom: 15px; font-size: 1rem; color: #d63031;">
+                    ⚠️ یہ عمل تمام ڈیٹا کو حذف کر دے گا اور واپس نہیں لایا جا سکے گا!
+                </p>
+                <p style="margin-bottom: 15px; font-size: 1rem;">براہ کرم پاس ورڈ درج کریں:</p>
+                <input type="password" id="deleteAllPassword" class="password-input" placeholder="پاس ورڈ">
+                <div class="edit-weight-btns">
+                    <button class="confirm-btn" onclick="confirmDeleteAll()" style="background: linear-gradient(135deg, #d63031, #c23616);">تمام ڈیٹا ڈیلیٹ کریں</button>
+                    <button class="cancel-btn" onclick="closeDeleteAllModal()">منسوخ کریں</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- HandedOver Modal -->
-<div class="modal" id="handedModal">
-  <div class="box rtl">
-    <h3>ہینڈڈ اوور درج کریں</h3>
-    <div style="display:flex;gap:8px">
-      <input id="handedDate" type="date" class="input"/>
-      <input id="handedAmount" type="number" class="input" placeholder="رقم (روپے)"/>
-      <input id="handedNote" class="input" placeholder="تفصیل (اختیاری)"/>
+    <!-- نئی شاپ ایڈ مودل -->
+    <div id="addShopModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">نئی شاپ شامل کریں</h2>
+                <button class="close-btn" onclick="closeAddShopModal()">×</button>
+            </div>
+            <div class="expense-form">
+                <div class="expense-input-group">
+                    <label class="expense-label">شاپ کا نام</label>
+                    <input type="text" class="expense-input" id="newShopName" placeholder="شاپ کا نام درج کریں">
+                </div>
+                <div class="expense-input-group">
+                    <label class="expense-label">شاپ آئی ڈی</label>
+                    <input type="text" class="expense-input" id="newShopId" placeholder="شاپ آئی ڈی درج کریں">
+                </div>
+                <button class="submit-expense" onclick="addNewShop()">شاپ شامل کریں</button>
+            </div>
+        </div>
     </div>
-    <div style="margin-top:10px;display:flex;gap:8px">
-      <button class="btn btn-primary" onclick="submitHanded()">جمع کریں</button>
-      <button class="btn" onclick="closeHanded()">منسوخ</button>
+
+    <div class="container" id="mainContainer" style="display: none;">
+        <!-- ہیڈر سیکشن -->
+        <div class="header">
+            <div class="top-options mobile-only">
+                <button class="top-btn" onclick="openExpenseModal()">📊 اخراجات</button>
+                <button class="top-btn" onclick="openReportModal()">📈 رپورٹ</button>
+                <button class="top-btn" onclick="openDeleteAllModal()" style="background: rgba(255,255,255,0.15);">🗑️ ڈیلیٹ</button>
+                <button class="top-btn" onclick="openAddShopModal()" style="background: rgba(255,255,255,0.15);">🏪 نیا شاپ</button>
+            </div>
+            <h1>🍦 آئس کریم سیلز مینجمنٹ</h1>
+            <p>روزانہ وزن اور فروخت کا ریکارڈ</p>
+            <div class="top-options desktop-only">
+                <button class="top-btn" onclick="openExpenseModal()">📊 اخراجات</button>
+                <button class="top-btn" onclick="openReportModal()">📈 رپورٹ</button>
+                <button class="top-btn" onclick="openDeleteAllModal()" style="background: rgba(255,255,255,0.15);">🗑️ تمام ڈیلیٹ</button>
+                <button class="top-btn" onclick="openAddShopModal()" style="background: rgba(255,255,255,0.15);">🏪 نیا شاپ</button>
+            </div>
+        </div>
+        
+        <!-- شورٹ سمری سیکشن -->
+        <div class="summary-section">
+            <h2 style="text-align: center; margin-bottom: 15px; font-size: 1.4rem;">📊 شورٹ سمری</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-title">کل ہینڈڈ اوور</div>
+                    <div class="summary-value" id="totalHandedOver">0 روپے</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-title">کیش ان ہینڈ</div>
+                    <div class="summary-value" id="currentCashInHand">0 روپے</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-title">خریدی گئی آئس کریم کی ادائیگی پینڈنگ</div>
+                    <div class="summary-value" id="iceCreamPending">0 روپے</div>
+                </div>
+            </div>
+            
+            <div class="cash-buttons">
+                <button class="cash-btn" onclick="openHandedOverModal()">🤝 نیا ہینڈڈ اوور</button>
+                <button class="cash-btn" onclick="toggleHandedOverDetails()">📋 ہینڈڈ اوور ڈیٹیلز</button>
+                <button class="cash-btn" onclick="openExpenseEntriesModal()">📋 اخراجات انٹریز</button>
+            </div>
+            
+            <div class="handed-over-section" id="handedOverDetails" style="display: none;">
+                <div class="handed-over-header">
+                    <h3>ہینڈڈ اوور کی تفصیلات</h3>
+                </div>
+                <div id="handedOverDetailsContent">
+                    <!-- ہینڈڈ اوور ڈیٹیلز یہاں لوڈ ہوں گی -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- تاریخ سیکشن -->
+        <div class="date-section">
+            <h2>آج کی تاریخ</h2>
+            <div class="current-date" id="currentDate"></div>
+        </div>
+        
+        <!-- شاپ سلیکٹر -->
+        <div class="shop-selector">
+            <div class="shop-buttons" id="shopButtonsContainer">
+                <!-- شاپ بٹنز JavaScript کے ذریعے لوڈ ہوں گے -->
+            </div>
+        </div>
+
+        <!-- شاپ وائز کیش سیکشن -->
+        <div class="shop-cash-section">
+            <div class="shop-cash-title">📊 موجودہ شاپ کا کیش ان ہینڈ</div>
+            <div class="shop-cash-value" id="currentShopCash">0 روپے</div>
+        </div>
+        
+        <!-- پراڈکٹس ٹیبل - تبدیل شدہ ہیڈرز -->
+        <div class="products-table-container">
+            <table class="products-table" id="productsTable">
+                <thead>
+                    <tr>
+                        <th>آئس کریم</th>
+                        <th>پرانا وزن</th>
+                        <th>نیا وزن</th>
+                        <th>موجودہ وزن</th>
+                        <th>سیل کی رقم</th>
+                        <th>انٹریز</th>
+                    </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                    <!-- پراڈکٹس کا ڈیٹا JavaScript کے ذریعے لوڈ ہوگا -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- کیش سیکشن -->
+        <div class="cash-section">
+            <div class="cash-input-group">
+                <span class="cash-label">ٹوٹل کیش:</span>
+                <input type="number" class="cash-input" id="totalCash" placeholder="کل کیش درج کریں" oninput="updateCashComparison()">
+                <button class="auto-cash-btn" onclick="autoCalculateCash()">🔢 خودکار کیش</button>
+            </div>
+            
+            <div class="cash-comparison" id="cashComparison">
+                <div class="comparison-title">کیش موازنہ</div>
+                <div class="comparison-result" id="comparisonResult">براہ کرم کیش درج کریں</div>
+            </div>
+            
+            <button class="save-btn" id="saveBtn" onclick="saveAllData()" disabled>💾 سارا ڈیٹا سیو کریں</button>
+        </div>
     </div>
-  </div>
-</div>
 
-<script>
-// --- Core data structures ---
-const shops = {
-  delhi:{name:"دہلی گیٹ", products:["پستہ بادام","سٹرابری","چاکلیٹ","ٹوٹی فروٹی","مینگو","بلیوبیری","پائن ایپل","ونیلا","اوریو","قلفہ"]},
-  shahalam:{name:"شاہ عالم", products:[]},
-  lohari:{name:"لوہاری گیٹ", products:[]},
-  bilal:{name:"بلال گنج", products:[]}
-};
-// copy product lists into other shops
-Object.keys(shops).forEach(k=>{ if(shops[k].products.length===0) shops[k].products=shops.delhi.products.slice() });
+    <!-- اخراجات مودل -->
+    <div id="expenseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">📊 اخراجات درج کریں - <span id="expenseShopName"></span></h2>
+                <button class="close-btn" onclick="closeExpenseModal()">×</button>
+            </div>
+            <div class="expense-form">
+                <div class="expense-grid">
+                    <div class="expense-input-group">
+                        <label class="expense-label">شاپ کا کرایہ</label>
+                        <input type="number" class="expense-input" id="shopRent" placeholder="روپے میں">
+                    </div>
+                    <div class="expense-input-group">
+                        <label class="expense-label">بجلی کا بل</label>
+                        <input type="number" class="expense-input" id="electricityBill" placeholder="روپے میں">
+                    </div>
+                    <div class="expense-input-group">
+                        <label class="expense-label">ملازمین کی تنخواہ</label>
+                        <input type="number" class="expense-input" id="salary" placeholder="روپے میں">
+                    </div>
+                    <div class="expense-input-group">
+                        <label class="expense-label">خریدی گئی آئس کریم</label>
+                        <input type="number" class="expense-input" id="iceCreamPurchase" placeholder="کل خریداری کی رقم">
+                    </div>
+                    <div class="expense-input-group">
+                        <label class="expense-label">خریدی گئی آئس کریم کی ادائیگی</label>
+                        <input type="number" class="expense-input" id="iceCreamPaid" placeholder="ادائیگی کی گئی رقم">
+                    </div>
+                </div>
+                
+                <div class="ice-cream-purchase-section">
+                    <div class="purchase-status">
+                        <span>خریدی گئی آئس کریم کی ادائیگی پینڈنگ:</span>
+                        <span id="iceCreamPendingDisplay" class="purchase-pending">0 روپے</span>
+                    </div>
+                </div>
+                
+                <div class="expense-input-group other-expenses-list">
+                    <label class="expense-label">دیگر اخراجات</label>
+                    <div id="otherExpensesContainer">
+                        <div class="expense-item">
+                            <input type="text" class="expense-input" placeholder="خرچے کا نام" id="expenseName0">
+                            <input type="number" class="expense-input" placeholder="رقم" id="expenseAmount0">
+                        </div>
+                    </div>
+                    <button type="button" class="add-expense-btn" onclick="addExpenseField()">+ خرچہ شامل کریں</button>
+                </div>
+                
+                <button class="submit-expense" onclick="submitExpenses()">خرچہ جمع کریں</button>
+            </div>
+        </div>
+    </div>
 
-let currentShop = 'delhi';
-let salesData = {}; // salesData[shop] = [{oldWeight, newWeight, sold, calcCurrent},...]
-let expenses = {}; // expenses[shop] = {...}
-let handed = []; // array of handed records
+    <!-- رپورٹ مودل -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">📈 ڈیٹا رپورٹ</h2>
+                <button class="close-btn" onclick="closeReportModal()">×</button>
+            </div>
+            <div class="report-controls">
+                <div class="report-filters">
+                    <div class="filter-group">
+                        <label class="filter-label">شاپ منتخب کریں</label>
+                        <select class="filter-select" id="reportShop">
+                            <option value="all">تمام شاپس</option>
+                            <!-- شاپس JavaScript کے ذریعے لوڈ ہوں گی -->
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">سے تاریخ</label>
+                        <input type="date" class="filter-select" id="reportFromDate">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">تک تاریخ</label>
+                        <input type="date" class="filter-select" id="reportToDate">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">رپورٹ ٹائپ</label>
+                        <select class="filter-select" id="reportType">
+                            <option value="daily">روزانہ</option>
+                            <option value="weekly">ہفتہ وار</option>
+                            <option value="monthly">ماہانہ</option>
+                            <option value="yearly">سالانہ</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="report-actions">
+                    <button class="report-btn" onclick="generateReport()">📊 رپورٹ بنائیں</button>
+                    <button class="report-btn" onclick="exportToPDF()">📄 PDF ڈاؤن لوڈ</button>
+                    <button class="report-btn" onclick="exportToExcel()">📊 Excel ڈاؤن لوڈ</button>
+                    <button class="report-btn" onclick="printReport()">🖨️ پرنٹ کریں</button>
+                </div>
+            </div>
+            <div id="reportContent">
+                <!-- رپورٹ کا مواد یہاں لوڈ ہوگا -->
+            </div>
+        </div>
+    </div>
 
-// --- Utilities ---
-function uid(){ return 'ice_'+Date.now()+'_'+Math.floor(Math.random()*9999) }
-function saveToLocal(){ localStorage.setItem('ice_app_saved', JSON.stringify({salesData,expenses,handed})) }
-function loadFromLocal(){ const d = localStorage.getItem('ice_app_saved'); if(d){ const parsed=JSON.parse(d); salesData=parsed.salesData||{}; expenses=parsed.expenses||{}; handed=parsed.handed||[] } }
+    <script>
+        // شاپس کا ڈیٹا
+        const shopsData = {
+            delhi: {
+                name: "دہلی گیٹ",
+                products: [
+                    { name: "پستہ بادام", icon: "🌰", oldWeight: 0 },
+                    { name: "سٹرابری", icon: "🍓", oldWeight: 0 },
+                    { name: "چاکلیٹ", icon: "🍫", oldWeight: 0 },
+                    { name: "ٹوٹی فروٹی", icon: "🍎", oldWeight: 0 },
+                    { name: "مینگو", icon: "🥭", oldWeight: 0 },
+                    { name: "بلیو بیری", icon: "🫐", oldWeight: 0 },
+                    { name: "پائن ایپل", icon: "🍍", oldWeight: 0 },
+                    { name: "ونیلا", icon: "🍦", oldWeight: 0 },
+                    { name: "اوریو", icon: "🍪", oldWeight: 0 },
+                    { name: "قلفہ", icon: "🧁", oldWeight: 0 }
+                ]
+            },
+            shahalam: {
+                name: "شاہ عالم",
+                products: [
+                    { name: "پستہ بادام", icon: "🌰", oldWeight: 0 },
+                    { name: "سٹرابری", icon: "🍓", oldWeight: 0 },
+                    { name: "چاکلیٹ", icon: "🍫", oldWeight: 0 },
+                    { name: "ٹوٹی فروٹی", icon: "🍎", oldWeight: 0 },
+                    { name: "مینگو", icon: "🥭", oldWeight: 0 },
+                    { name: "بلیو بیری", icon: "🫐", oldWeight: 0 },
+                    { name: "پائن ایپل", icon: "🍍", oldWeight: 0 },
+                    { name: "ونیلا", icon: "🍦", oldWeight: 0 },
+                    { name: "اوریو", icon: "🍪", oldWeight: 0 },
+                    { name: "قلفہ", icon: "🧁", oldWeight: 0 }
+                ]
+            },
+            lohari: {
+                name: "لوہاری گیٹ",
+                products: [
+                    { name: "پستہ بادام", icon: "🌰", oldWeight: 0 },
+                    { name: "سٹرابری", icon: "🍓", oldWeight: 0 },
+                    { name: "چاکلیٹ", icon: "🍫", oldWeight: 0 },
+                    { name: "ٹوٹی فروٹی", icon: "🍎", oldWeight: 0 },
+                    { name: "مینگو", icon: "🥭", oldWeight: 0 },
+                    { name: "بلیو بیری", icon: "🫐", oldWeight: 0 },
+                    { name: "پائن ایپل", icon: "🍍", oldWeight: 0 },
+                    { name: "ونیلا", icon: "🍦", oldWeight: 0 },
+                    { name: "اوریو", icon: "🍪", oldWeight: 0 },
+                    { name: "قلفہ", icon: "🧁", oldWeight: 0 }
+                ]
+            },
+            bilal: {
+                name: "بلال گنج",
+                products: [
+                    { name: "پستہ بادام", icon: "🌰", oldWeight: 0 },
+                    { name: "سٹرابری", icon: "🍓", oldWeight: 0 },
+                    { name: "چاکلیٹ", icon: "🍫", oldWeight: 0 },
+                    { name: "ٹوٹی فروٹی", icon: "🍎", oldWeight: 0 },
+                    { name: "مینگو", icon: "🥭", oldWeight: 0 },
+                    { name: "بلیو بیری", icon: "🫐", oldWeight: 0 },
+                    { name: "پائن ایپل", icon: "🍍", oldWeight: 0 },
+                    { name: "ونیلا", icon: "🍦", oldWeight: 0 },
+                    { name: "اوریو", icon: "🍪", oldWeight: 0 },
+                    { name: "قلفہ", icon: "🧁", oldWeight: 0 }
+                ]
+            }
+        };
 
-// --- Login ---
-function doLogin(){
-  const id=document.getElementById('loginId').value.trim();
-  const p=document.getElementById('loginPass').value;
-  if(id==='03237131918' && p==='Saab'){ document.getElementById('loginModal').style.display='none'; document.getElementById('app').style.display='block'; init(); }
-  else alert('غلط آئی ڈی یا پاس ورڈ');
-}
+        // گلوبل ویری ایبلز
+        let currentShop = 'delhi';
+        let expensesData = {};
+        let salesData = {};
+        let expenseCounter = 1;
+        let editExpenseCounter = 0;
+        let allSavedData = [];
+        let currentEditingProductIndex = -1;
+        let isLoggedIn = false;
+        let handedOverData = [];
+        let currentEditingEntry = null;
+        let currentViewingProductIndex = -1;
+        let iceCreamPurchaseData = {};
+        let currentEditingExpenseEntry = null;
+        let currentEditingHandedOverEntry = null;
+        const LOGIN_PASSWORD = "Saab";
+        const SYSTEM_PASSWORD = "4088";
 
-// --- Initialize UI & data ---
-function init(){
-  loadFromLocal();
-  renderProducts();
-  updateSummary();
-  document.getElementById('saveBtn').disabled=false;
-}
+        // فاسٹ انٹری سسٹم
+        let currentFocusIndex = 0;
+        let currentColumn = 0;
 
-// switch shop
-function switchShop(val){
-  currentShop=val;
-  renderProducts();
-  updateSummary();
-}
+        // لوڈنگ اسپنر فنکشنز
+        function showLoading(show = true) {
+            document.getElementById('loadingSpinner').style.display = show ? 'flex' : 'none';
+        }
 
-function renderProducts(){
-  const tbody=document.getElementById('productsBody'); tbody.innerHTML='';
-  if(!salesData[currentShop]) salesData[currentShop]=shops[currentShop].products.map(_=>({oldWeight:0,newWeight:0,sold:0,calcCurrent:0}));
-  salesData[currentShop].forEach((p,i)=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${shops[currentShop].products[i]}</td>
-      <td><input class="input" value="${p.oldWeight}" data-i="${i}" onchange="onOldChange(this)" /></td>
-      <td><input class="input" value="${p.newWeight}" data-i="${i}" onchange="onNewChange(this)" /></td>
-      <td><input class="input" value="${p.sold}" data-i="${i}" onchange="onSoldChange(this)"/></td>
-      <td id="cur_${i}">${p.calcCurrent||0}</td>`;
-    tbody.appendChild(tr);
-  });
-  updateComparison();
-}
+        // نوٹیفکیشن فنکشن
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
 
-// input handlers
-function onOldChange(el){ const i=+el.dataset.i; salesData[currentShop][i].oldWeight=+el.value||0; recalc(i); saveToLocal(); updateSummary(); }
-function onNewChange(el){ const i=+el.dataset.i; salesData[currentShop][i].newWeight=+el.value||0; recalc(i); saveToLocal(); updateSummary(); }
-function onSoldChange(el){ const i=+el.dataset.i; salesData[currentShop][i].sold=+el.value||0; recalc(i); saveToLocal(); updateSummary(); }
+        // ایرر ہینڈلنگ فنکشنز
+        function showError(message) {
+            alert(`❌ ${message}`);
+        }
 
-function recalc(i){
-  const item = salesData[currentShop][i];
-  item.calcCurrent = (item.oldWeight||0) + (item.newWeight||0) - (item.sold||0);
-  document.getElementById('cur_'+i).textContent = item.calcCurrent;
-}
+        function showSuccess(message) {
+            alert(`✅ ${message}`);
+        }
 
-// auto-calc cash from sold grams (1g = 1 unit)
-function autoCalc(){
-  const total = salesData[currentShop].reduce((s,p)=>s + (p.sold||0),0);
-  document.getElementById('totalCash').value = total;
-  updateComparison();
-}
+        // ڈیٹا والیڈیشن
+        function validateSalesData(data) {
+            const errors = [];
+            
+            if (!data.shop) errors.push('شاپ منتخب کریں');
+            if (data.totalCash < 0) errors.push('کیش منفی نہیں ہو سکتا');
+            
+            data.salesData.forEach((product, index) => {
+                if (product.soldAmount < 0) {
+                    errors.push(`${shopsData[data.shop].products[index].name} کی سیل منفی نہیں ہو سکتی`);
+                }
+                if (product.currentWeight < 0) {
+                    errors.push(`${shopsData[data.shop].products[index].name} کا موجودہ وزن منفی نہیں ہو سکتا`);
+                }
+            });
+            
+            return errors;
+        }
 
-// comparison
-function updateComparison(){
-  const totalCash = +document.getElementById('totalCash').value || 0;
-  const totalSale = salesData[currentShop] ? salesData[currentShop].reduce((s,p)=>s + (p.sold||0),0) : 0;
-  const diff = totalCash - totalSale;
-  const cmp = document.getElementById('comparison');
-  if(totalCash===0) cmp.textContent='کیش درج کریں';
-  else if(diff===0) cmp.textContent='✅ کیش بالکل صحیح ہے';
-  else if(diff>0) cmp.textContent='➕ '+diff+' روپے زیادہ';
-  else cmp.textContent='➖ '+Math.abs(diff)+' روپے کم';
-}
+        // پاس ورڈ چیک سسٹم
+        function addPasswordCheck(callback, actionName) {
+            const password = prompt(`${actionName} کے لیے سسٹم پاس ورڈ درج کریں:`);
+            if (password === SYSTEM_PASSWORD) {
+                callback();
+            } else {
+                showError('غلط پاس ورڈ!');
+            }
+        }
 
-// save
-function saveData(){
-  const record = {
-    type:'sale',
-    shop: currentShop,
-    shopName: shops[currentShop].name,
-    date: new Date().toISOString(),
-    salesData: JSON.parse(JSON.stringify(salesData[currentShop])),
-    totalSale: salesData[currentShop].reduce((s,p)=>s + (p.sold||0),0),
-    timestamp: Date.now(),
-    key: uid()
-  };
-  // push into local storage array
-  let arr = JSON.parse(localStorage.getItem('ice_records')||'[]');
-  arr.push(record);
-  localStorage.setItem('ice_records', JSON.stringify(arr));
-  saveToLocal();
-  alert('ڈیٹا محفوظ ہوگیا!');
-  updateSummary();
-}
+        // فاسٹ انٹری سسٹم
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                moveToNextCell();
+            }
+            
+            // Ctrl + Enter: سیو ڈیٹا
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                if (!document.getElementById('saveBtn').disabled) {
+                    saveAllData();
+                }
+            }
+            
+            // شارٹ کٹ کی بورڈ
+            if (e.ctrlKey) {
+                if (e.key === '1') {
+                    const btn = document.querySelector('[data-shop="delhi"]');
+                    if (btn) btn.click();
+                } else if (e.key === '2') {
+                    const btn = document.querySelector('[data-shop="shahalam"]');
+                    if (btn) btn.click();
+                } else if (e.key === '3') {
+                    const btn = document.querySelector('[data-shop="lohari"]');
+                    if (btn) btn.click();
+                } else if (e.key === '4') {
+                    const btn = document.querySelector('[data-shop="bilal"]');
+                    if (btn) btn.click();
+                }
+            }
+        });
 
-// expenses modal
-function openExpenses(){ document.getElementById('expenseModal').style.display='flex' }
-function closeExpenses(){ document.getElementById('expenseModal').style.display='none' }
-function submitExpenses(){
-  if(!expenses[currentShop]) expenses[currentShop]={rent:0,electric:0,salary:0,purchase:0,paid:0,others:[]};
-  expenses[currentShop].rent = +document.getElementById('rent').value || 0;
-  expenses[currentShop].electric = +document.getElementById('electric').value || 0;
-  expenses[currentShop].salary = +document.getElementById('salary').value || 0;
-  expenses[currentShop].purchase = +document.getElementById('purchase').value || 0;
-  expenses[currentShop].paid = +document.getElementById('paid').value || 0;
-  saveToLocal();
-  closeExpenses();
-  alert('اخراجات محفوظ ہوگئے');
-  updateSummary();
-}
+        function moveToNextCell() {
+            const rows = document.querySelectorAll('#productsTableBody tr');
+            if (rows.length === 0) return;
+            
+            const currentRow = rows[Math.floor(currentFocusIndex / 2)];
+            if (!currentRow) return;
+            
+            const columns = currentRow.querySelectorAll('input[type="number"]');
+            if (columns.length === 0) return;
+            
+            // موجودہ کالم
+            currentColumn++;
+            
+            // اگر آخری کالم ہے تو اگلی قطار پر جائیں
+            if (currentColumn >= columns.length) {
+                currentColumn = 0;
+                currentFocusIndex += 2;
+            }
+            
+            // اگر آخری قطار ہے تو پہلی قطار پر واپس جائیں
+            if (currentFocusIndex >= rows.length * 2) {
+                currentFocusIndex = 0;
+                currentColumn = 0;
+            }
+            
+            // نئے کالم پر فوکس کریں
+            const newRowIndex = Math.floor(currentFocusIndex / 2);
+            const newRow = rows[newRowIndex];
+            if (newRow) {
+                const newColumns = newRow.querySelectorAll('input[type="number"]');
+                if (newColumns[currentColumn]) {
+                    // پرانے فوکس کو ہٹائیں
+                    document.querySelectorAll('.current-input').forEach(el => {
+                        el.classList.remove('current-input');
+                    });
+                    
+                    // نئے فوکس کو ہائی لائٹ کریں
+                    newColumns[currentColumn].classList.add('current-input');
+                    newColumns[currentColumn].focus();
+                    newColumns[currentColumn].select();
+                }
+            }
+        }
 
-// handed over
-function openHandedOver(){ document.getElementById('handedModal').style.display='flex' }
-function closeHanded(){ document.getElementById('handedModal').style.display='none' }
-function submitHanded(){
-  const d=document.getElementById('handedDate').value || new Date().toISOString().split('T')[0];
-  const amt= +document.getElementById('handedAmount').value || 0;
-  const note=document.getElementById('handedNote').value || '';
-  if(amt<=0){ alert('صحیح رقم درج کریں'); return; }
-  handed.push({date:d,amount:amt,note,shop:currentShop,key:uid()});
-  saveToLocal();
-  closeHanded();
-  alert('ہینڈڈ اوور محفوظ ہوگیا');
-  updateSummary();
-}
+        // ان پٹ فیلڈز پر فوکس ہونے پر انڈیکس اپڈیٹ کریں
+        document.addEventListener('focusin', function(e) {
+            if (e.target.matches('.new-weight, .current-weight')) {
+                const rows = document.querySelectorAll('#productsTableBody tr');
+                const rowIndex = Array.from(rows).indexOf(e.target.closest('tr'));
+                const inputs = e.target.closest('tr').querySelectorAll('input[type="number"]');
+                const inputIndex = Array.from(inputs).indexOf(e.target);
+                
+                currentFocusIndex = rowIndex * 2;
+                currentColumn = inputIndex;
+                
+                // ہائی لائٹ موجودہ ان پٹ
+                document.querySelectorAll('.current-input').forEach(el => {
+                    el.classList.remove('current-input');
+                });
+                e.target.classList.add('current-input');
+            }
+        });
 
-// summary
-function updateSummary(){
-  // total handed for current shop
-  const th = handed.filter(h=>h.shop===currentShop).reduce((s,h)=>s+h.amount,0);
-  document.getElementById('totalHanded').textContent = th + ' روپے';
-  // cash in hand - sum of last saved totalCash for this shop from records (approx)
-  const recs = JSON.parse(localStorage.getItem('ice_records')||'[]').filter(r=>r.shop===currentShop);
-  const lastTotal = recs.length ? recs[recs.length-1].totalSale : 0;
-  document.getElementById('cashInHand').textContent = lastTotal + ' روپے';
-  // pending purchase
-  const shopExp = expenses[currentShop] || {purchase:0,paid:0};
-  const pending = (shopExp.purchase || 0) - (shopExp.paid || 0);
-  document.getElementById('pendingPurchase').textContent = pending + ' روپے';
-}
+        // لاگ ان فنکشن
+        function login() {
+            const userId = document.getElementById('userId').value;
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('loginError');
 
-// export / print
-function exportPDF(){ window.print(); }
+            if (userId === '03237131918' && password === LOGIN_PASSWORD) {
+                isLoggedIn = true;
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+                
+                showLoading(true);
+                setTimeout(() => {
+                    // لوکل اسٹوریج سے ڈیٹا لوڈ کریں
+                    loadAllSavedData();
+                    updateCurrentDate();
+                    updateShopSelector();
+                    loadShopData('delhi');
+                    updateSummary();
+                    updateCurrentShopCash();
+                    showLoading(false);
+                }, 1000);
+            } else {
+                errorElement.style.display = 'block';
+            }
+        }
 
-// load saved app state on startup
-(function(){
-  loadFromLocal();
-  // show login modal by default (already visible)
-})();
-</script>
+        // تمام سیو ڈیٹا لوڈ کریں - درست شدہ ورژن
+        function loadAllSavedData() {
+            allSavedData = [];
+            handedOverData = [];
+            iceCreamPurchaseData = {};
+            
+            // تمام شاپس کے پرانے وزن ری سیٹ کریں
+            Object.keys(shopsData).forEach(shopId => {
+                shopsData[shopId].products.forEach(product => {
+                    product.oldWeight = 0;
+                });
+            });
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                try {
+                    if (key.startsWith('iceCreamData_')) {
+                        const data = JSON.parse(localStorage.getItem(key));
+                        allSavedData.push({...data, key: key});
+                        
+                        // شاپ کا پرانا وزن اپڈیٹ کریں
+                        if (data.shop && data.salesData && shopsData[data.shop]) {
+                            data.salesData.forEach((product, index) => {
+                                if (shopsData[data.shop].products[index]) {
+                                    // آخری انٹری کا موجودہ وزن پرانے وزن کے طور پر سیٹ کریں
+                                    shopsData[data.shop].products[index].oldWeight = product.currentWeight || 0;
+                                }
+                            });
+                        }
+                    } else if (key.startsWith('handedOver_')) {
+                        const data = JSON.parse(localStorage.getItem(key));
+                        // پرانے ڈیٹا کے لیے شاپ کی معلومات شامل کریں
+                        if (!data.shop) {
+                            // key سے شاپ کی معلومات نکالیں
+                            const keyParts = key.split('_');
+                            if (keyParts.length >= 2) {
+                                data.shop = keyParts[1];
+                            }
+                        }
+                        handedOverData.push({...data, key: key});
+                    } else if (key.startsWith('expenseData_')) {
+                        const data = JSON.parse(localStorage.getItem(key));
+                        allSavedData.push({...data, key: key});
+                        
+                        // آئس کریم خریداری ڈیٹا کو لوڈ کریں
+                        if (data.shop && data.expenses) {
+                            if (!iceCreamPurchaseData[data.shop]) {
+                                iceCreamPurchaseData[data.shop] = {
+                                    totalPurchase: 0,
+                                    totalPaid: 0
+                                };
+                            }
+                            iceCreamPurchaseData[data.shop].totalPurchase += data.expenses.iceCreamPurchase || 0;
+                            iceCreamPurchaseData[data.shop].totalPaid += data.expenses.iceCreamPaid || 0;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading data from key:', key, error);
+                }
+            }
+            
+            // ہینڈڈ اوور ڈیٹا کو تاریخ کے حساب سے ترتیب دیں
+            handedOverData.sort((a, b) => new Date(b.date) - new Date(a.date));
+        }
+
+        // موجودہ تاریخ دکھائیں
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                timeZone: 'Asia/Karachi'
+            };
+            const urduDate = now.toLocaleDateString('ur-PK', options);
+            document.getElementById('currentDate').textContent = urduDate;
+        }
+        
+        // شاپ سلیکٹر اپڈیٹ کریں
+        function updateShopSelector() {
+            const shopButtons = document.getElementById('shopButtonsContainer');
+            const reportShop = document.getElementById('reportShop');
+            
+            // موجودہ آپشنز خالی کریں
+            shopButtons.innerHTML = '';
+            reportShop.innerHTML = '<option value="all">تمام شاپس</option>';
+            
+            // تمام شاپس شامل کریں
+            Object.keys(shopsData).forEach(shopId => {
+                // شاپ بٹنز
+                const button = document.createElement('button');
+                button.className = `shop-btn ${shopId === currentShop ? 'active' : ''}`;
+                button.setAttribute('data-shop', shopId);
+                button.textContent = shopsData[shopId].name;
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.shop-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    loadShopData(shopId);
+                });
+                shopButtons.appendChild(button);
+                
+                // رپورٹ ڈراپ ڈاؤن
+                const option = document.createElement('option');
+                option.value = shopId;
+                option.textContent = shopsData[shopId].name;
+                reportShop.appendChild(option);
+            });
+        }
+        
+        // شاپ کا ڈیٹا لوڈ کریں - اپڈیٹ شدہ ورژن
+        function loadShopData(shopId) {
+            currentShop = shopId;
+            const shop = shopsData[shopId];
+            const tableBody = document.getElementById('productsTableBody');
+            
+            tableBody.innerHTML = '';
+            
+            shop.products.forEach((product, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="product-name-cell">
+                            <div class="product-icon">${product.icon}</div>
+                            <span>${product.name}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <input type="number" class="input-field old-weight" value="${product.oldWeight}" readonly>
+                        <button class="edit-weight-btn" onclick="openEditWeightModal(${index})">✏️ پرانا وزن تبدیل کریں</button>
+                    </td>
+                    <td data-product-name="${product.name}">
+                        <input type="number" class="input-field new-weight" placeholder="نیا وزن درج کریں" 
+                               oninput="calculateProduct(${index})" id="newWeight${index}">
+                    </td>
+                    <td data-product-name="${product.name}">
+                        <input type="number" class="input-field current-weight" placeholder="موجودہ وزن درج کریں" 
+                               oninput="calculateProduct(${index})" id="currentWeight${index}">
+                    </td>
+                    <td>
+                        <span class="result-value" id="soldAmount${index}">0</span>
+                    </td>
+                    <td>
+                        <button class="view-entries-btn" onclick="openProductEntriesModal(${index})">📋 انٹریز دیکھیں</button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+                
+                // ڈیٹا اسٹور کریں
+                if (!salesData[shopId]) salesData[shopId] = [];
+                salesData[shopId][index] = {
+                    oldWeight: product.oldWeight,
+                    newWeight: 0,
+                    currentWeight: 0,
+                    soldAmount: 0
+                };
+            });
+            
+            // اخراجات ڈیٹا کو لوڈ کریں
+            if (!expensesData[shopId]) {
+                expensesData[shopId] = {
+                    shopRent: 0,
+                    electricityBill: 0,
+                    salary: 0,
+                    iceCreamPurchase: 0,
+                    iceCreamPaid: 0,
+                    otherExpenses: []
+                };
+            }
+            
+            // آئس کریم خریداری کا پینڈنگ اپڈیٹ کریں
+            updateIceCreamPurchasePending();
+            
+            // موجودہ شاپ کا کیش ان ہینڈ اپڈیٹ کریں
+            updateCurrentShopCash();
+            
+            // فوکس ری سیٹ کریں
+            currentFocusIndex = 0;
+            currentColumn = 0;
+        }
+        
+        // موجودہ شاپ کا کیش ان ہینڈ اپڈیٹ کریں - درست شدہ ورژن
+        function updateCurrentShopCash() {
+            let currentShopCash = 0;
+            
+            // موجودہ شاپ کا سیلز ڈیٹا جمع کریں
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('iceCreamData_')) {
+                    try {
+                        const data = JSON.parse(localStorage.getItem(key));
+                        if (data.shop === currentShop) {
+                            currentShopCash += data.totalSale || 0;
+                        }
+                    } catch (error) {
+                        console.error('Error loading sales data:', key, error);
+                    }
+                }
+            }
+            
+            // موجودہ شاپ کے اخراجات منفی کریں
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('expenseData_')) {
+                    try {
+                        const data = JSON.parse(localStorage.getItem(key));
+                        if (data.shop === currentShop) {
+                            // تمام اخراجات منفی کریں
+                            const totalExpense = 
+                                (data.expenses.shopRent || 0) +
+                                (data.expenses.electricityBill || 0) +
+                                (data.expenses.salary || 0) +
+                                (data.expenses.iceCreamPaid || 0) +
+                                (data.expenses.otherExpenses ? 
+                                    data.expenses.otherExpenses.reduce((sum, exp) => sum + (exp.amount || 0), 0) : 0);
+                            
+                            currentShopCash -= totalExpense;
+                        }
+                    } catch (error) {
+                        console.error('Error loading expense data:', key, error);
+                    }
+                }
+            }
+            
+            // ہینڈڈ اوور کیش کو منفی کریں (صرف موجودہ شاپ کا)
+            // ہینڈڈ اوور ڈیٹا میں شاپ کی معلومات شامل کریں
+            handedOverData.forEach(item => {
+                // اگر ہینڈڈ اوور میں شاپ کی معلومات نہیں ہے تو صرف موجودہ شاپ کا ہینڈڈ اوور منفی کریں
+                if (!item.shop || item.shop === currentShop) {
+                    currentShopCash -= item.amount || 0;
+                }
+            });
+            
+            document.getElementById('currentShopCash').textContent = currentShopCash + ' روپے';
+        }
+        
+        // اخراجات جمع کریں - اپڈیٹ شدہ ورژن
+        function submitExpenses() {
+            try {
+                if (!expensesData[currentShop]) {
+                    expensesData[currentShop] = {
+                        shopRent: 0,
+                        electricityBill: 0,
+                        salary: 0,
+                        iceCreamPurchase: 0,
+                        iceCreamPaid: 0,
+                        otherExpenses: []
+                    };
+                }
+                
+                // بنیادی اخراجات
+                expensesData[currentShop].shopRent = parseFloat(document.getElementById('shopRent').value) || 0;
+                expensesData[currentShop].electricityBill = parseFloat(document.getElementById('electricityBill').value) || 0;
+                expensesData[currentShop].salary = parseFloat(document.getElementById('salary').value) || 0;
+                expensesData[currentShop].iceCreamPurchase = parseFloat(document.getElementById('iceCreamPurchase').value) || 0;
+                expensesData[currentShop].iceCreamPaid = parseFloat(document.getElementById('iceCreamPaid').value) || 0;
+                
+                // دیگر اخراجات
+                expensesData[currentShop].otherExpenses = [];
+                for (let i = 0; i < expenseCounter; i++) {
+                    const name = document.getElementById(`expenseName${i}`)?.value;
+                    const amount = parseFloat(document.getElementById(`expenseAmount${i}`)?.value) || 0;
+                    if (name && amount > 0) {
+                        expensesData[currentShop].otherExpenses.push({ name, amount });
+                    }
+                }
+                
+                // کل خرچہ کا حساب
+                const totalExpenseAmount = 
+                    (expensesData[currentShop].shopRent || 0) +
+                    (expensesData[currentShop].electricityBill || 0) +
+                    (expensesData[currentShop].salary || 0) +
+                    (expensesData[currentShop].iceCreamPaid || 0) +
+                    expensesData[currentShop].otherExpenses.reduce((sum, exp) => sum + (exp.amount || 0), 0);
+                
+                // خرچہ ڈیٹا کو فوری رپورٹ میں شامل کریں
+                const expenseData = {
+                    shop: currentShop,
+                    shopName: shopsData[currentShop].name,
+                    date: new Date().toISOString(),
+                    expenses: JSON.parse(JSON.stringify(expensesData[currentShop])),
+                    totalExpense: totalExpenseAmount, // کل خرچہ شامل کیا
+                    timestamp: new Date().getTime(),
+                    type: 'expense'
+                };
+                
+                const key = `expenseData_${currentShop}_${new Date().getTime()}`;
+                localStorage.setItem(key, JSON.stringify(expenseData));
+                
+                // آئس کریم خریداری ڈیٹا کو اپڈیٹ کریں
+                if (!iceCreamPurchaseData[currentShop]) {
+                    iceCreamPurchaseData[currentShop] = {
+                        totalPurchase: 0,
+                        totalPaid: 0
+                    };
+                }
+                iceCreamPurchaseData[currentShop].totalPurchase += expensesData[currentShop].iceCreamPurchase || 0;
+                iceCreamPurchaseData[currentShop].totalPaid += expensesData[currentShop].iceCreamPaid || 0;
+                
+                // ان پٹ فیلڈز خالی کریں
+                document.getElementById('shopRent').value = '';
+                document.getElementById('electricityBill').value = '';
+                document.getElementById('salary').value = '';
+                document.getElementById('iceCreamPurchase').value = '';
+                document.getElementById('iceCreamPaid').value = '';
+                
+                // دیگر اخراجات کے فیلڈز خالی کریں
+                for (let i = 0; i < expenseCounter; i++) {
+                    const nameField = document.getElementById(`expenseName${i}`);
+                    const amountField = document.getElementById(`expenseAmount${i}`);
+                    if (nameField) nameField.value = '';
+                    if (amountField) amountField.value = '';
+                }
+                
+                expenseCounter = 1;
+                
+                // فوری طور پر کیش ان ہینڈ اپڈیٹ کریں
+                updateCurrentShopCash();
+                updateSummary();
+                updateIceCreamPurchasePending();
+                
+                showSuccess('خرچہ کامیابی سے جمع ہو گیا! کیش ان ہینڈ اپڈیٹ ہو گئی۔');
+                closeExpenseModal();
+                
+            } catch (error) {
+                showError('خرچہ جمع کرنے میں مسئلہ ہوا: ' + error.message);
+            }
+        }
+        
+        // پراڈکٹ کا حساب کتاب - نیا فارمولا
+        function calculateProduct(index) {
+            const newWeight = parseFloat(document.getElementById(`newWeight${index}`).value) || 0;
+            const currentWeight = parseFloat(document.getElementById(`currentWeight${index}`).value) || 0;
+            const oldWeight = salesData[currentShop][index].oldWeight;
+
+            // نیا فارمولا: سیل کی رقم = پرانا وزن + نیا وزن - موجودہ وزن
+            const soldAmount = oldWeight + newWeight - currentWeight;
+
+            // UI اپڈیٹ کریں
+            document.getElementById(`soldAmount${index}`).textContent = soldAmount;
+
+            // ڈیٹا اسٹور کریں
+            salesData[currentShop][index].newWeight = newWeight;
+            salesData[currentShop][index].currentWeight = currentWeight;
+            salesData[currentShop][index].soldAmount = soldAmount;
+            
+            updateTotalSale();
+            updateSaveButton();
+        }
+        
+        // سیو بٹن اپڈیٹ کریں
+        function updateSaveButton() {
+            const hasData = salesData[currentShop] && salesData[currentShop].some(product => 
+                product.newWeight > 0 || product.currentWeight > 0
+            );
+            document.getElementById('saveBtn').disabled = !hasData;
+        }
+        
+        // کل سیل اپڈیٹ کریں - تمام پراڈکٹس کی سیل کی رقم جمع کریں
+        function updateTotalSale() {
+            let totalSale = 0;
+            if (salesData[currentShop]) {
+                salesData[currentShop].forEach(product => {
+                    totalSale += product.soldAmount > 0 ? product.soldAmount : 0;
+                });
+            }
+            return totalSale;
+        }
+        
+        // پراڈکٹ انٹریز مودل کھولیں
+        function openProductEntriesModal(index) {
+            currentViewingProductIndex = index;
+            document.getElementById('productEntriesModal').style.display = 'block';
+            document.getElementById('productEntriesTitle').textContent = `${shopsData[currentShop].products[index].name} کی انٹریز`;
+            loadProductEntries();
+        }
+        
+        function closeProductEntriesModal() {
+            document.getElementById('productEntriesModal').style.display = 'none';
+            currentViewingProductIndex = -1;
+        }
+        
+        // پراڈکٹ انٹریز لوڈ کریں
+        function loadProductEntries() {
+            const productName = shopsData[currentShop].products[currentViewingProductIndex].name;
+            const productEntries = [];
+            
+            // تمام ڈیٹا سے اس پراڈکٹ کی انٹریز جمع کریں
+            allSavedData.forEach(data => {
+                if (data.type === 'sale' && data.shop === currentShop && data.salesData) {
+                    const productData = data.salesData[currentViewingProductIndex];
+                    if (productData && (productData.soldAmount > 0 || productData.newWeight > 0)) {
+                        productEntries.push({
+                            date: data.date,
+                            oldWeight: productData.oldWeight,
+                            newWeight: productData.newWeight,
+                            currentWeight: productData.currentWeight,
+                            soldAmount: productData.soldAmount,
+                            timestamp: data.timestamp,
+                            key: data.key
+                        });
+                    }
+                }
+            });
+            
+            // انٹریز کو تاریخ کے حساب سے ترتیب دیں
+            productEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            let entriesHTML = '';
+            
+            if (productEntries.length === 0) {
+                entriesHTML = '<p style="text-align: center; color: #636e72; font-size: 1rem; padding: 20px;">کوئی انٹری دستیاب نہیں ہے</p>';
+            } else {
+                entriesHTML = `
+                    <h3 style="text-align: center; margin: 15px 0; color: #2d3436;">${productName} کی تمام انٹریز</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="entries-table">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>پرانا وزن</th>
+                                    <th>نیا وزن</th>
+                                    <th>موجودہ وزن</th>
+                                    <th>سیل کی رقم</th>
+                                    <th>ایکشنز</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                productEntries.forEach((entry, index) => {
+                    const date = new Date(entry.date).toLocaleDateString('ur-PK');
+                    entriesHTML += `
+                        <tr>
+                            <td>${date}</td>
+                            <td>${entry.oldWeight} گرام</td>
+                            <td>${entry.newWeight} گرام</td>
+                            <td>${entry.currentWeight} گرام</td>
+                            <td>${entry.soldAmount} گرام</td>
+                            <td>
+                                <button class="edit-entry-btn-small" onclick="openEditProductEntry('${entry.key}', ${currentViewingProductIndex})">✏️</button>
+                                <button class="delete-entry-btn" onclick="secureDeleteProductEntry('${entry.key}', ${currentViewingProductIndex})">🗑️</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                entriesHTML += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('productEntriesContent').innerHTML = entriesHTML;
+        }
+
+        // پراڈکٹ انٹری ایڈٹ کھولیں
+        function openEditProductEntry(key, productIndex) {
+            addPasswordCheck(function() {
+                const data = JSON.parse(localStorage.getItem(key));
+                if (!data || !data.salesData) return;
+                
+                const productData = data.salesData[productIndex];
+                currentEditingEntry = { key, productIndex };
+                
+                document.getElementById('editEntryDate').value = data.date.split('T')[0];
+                document.getElementById('editEntryNewWeight').value = productData.newWeight || 0;
+                document.getElementById('editEntryCurrentWeight').value = productData.currentWeight || 0;
+                
+                document.getElementById('editEntryModal').style.display = 'block';
+            }, 'انٹری ایڈٹ');
+        }
+
+        function closeEditEntryModal() {
+            document.getElementById('editEntryModal').style.display = 'none';
+            currentEditingEntry = null;
+        }
+
+        // پراڈکٹ انٹری اپڈیٹ کریں
+        function updateProductEntry() {
+            if (!currentEditingEntry) return;
+            
+            const date = document.getElementById('editEntryDate').value;
+            const newWeight = parseFloat(document.getElementById('editEntryNewWeight').value) || 0;
+            const currentWeight = parseFloat(document.getElementById('editEntryCurrentWeight').value) || 0;
+            
+            if (!date) {
+                showError('براہ کرم تاریخ درج کریں');
+                return;
+            }
+            
+            try {
+                const data = JSON.parse(localStorage.getItem(currentEditingEntry.key));
+                const oldWeight = data.salesData[currentEditingEntry.productIndex].oldWeight;
+                
+                // سیل کی رقم کا حساب - نیا فارمولا
+                const soldAmount = oldWeight + newWeight - currentWeight;
+                
+                // ڈیٹا اپڈیٹ کریں
+                data.date = date;
+                data.salesData[currentEditingEntry.productIndex].newWeight = newWeight;
+                data.salesData[currentEditingEntry.productIndex].currentWeight = currentWeight;
+                data.salesData[currentEditingEntry.productIndex].soldAmount = soldAmount;
+                
+                // لوکل اسٹوریج میں سیو کریں
+                localStorage.setItem(currentEditingEntry.key, JSON.stringify(data));
+                
+                // شاپ کا پرانا وزن اپڈیٹ کریں
+                loadAllSavedData();
+                loadShopData(currentShop);
+                
+                showSuccess('انٹری کامیابی سے اپڈیٹ ہو گئی!');
+                closeEditEntryModal();
+                closeProductEntriesModal();
+            } catch (error) {
+                showError('انٹری اپڈیٹ کرنے میں مسئلہ ہوا: ' + error.message);
+            }
+        }
+
+        // پراڈکٹ انٹری ڈیلیٹ کریں
+        function secureDeleteProductEntry(key, productIndex) {
+            addPasswordCheck(function() {
+                if (confirm('کیا آپ واقعی یہ انٹری ڈیلیٹ کرنا چاہتے ہیں؟')) {
+                    try {
+                        localStorage.removeItem(key);
+                        
+                        // شاپ کا پرانا وزن اپڈیٹ کریں
+                        loadAllSavedData();
+                        loadShopData(currentShop);
+                        
+                        showSuccess('انٹری کامیابی سے ڈیلیٹ ہو گئی!');
+                        loadProductEntries();
+                    } catch (error) {
+                        showError('انٹری ڈیلیٹ کرنے میں مسئلہ ہوا: ' + error.message);
+                    }
+                }
+            }, 'انٹری ڈیلیٹ');
+        }
+
+        // اخراجات کی انٹریز دیکھیں
+        function openExpenseEntriesModal() {
+            document.getElementById('expenseEntriesModal').style.display = 'block';
+            loadExpenseEntries();
+        }
+
+        function closeExpenseEntriesModal() {
+            document.getElementById('expenseEntriesModal').style.display = 'none';
+        }
+
+        // اخراجات کی انٹریز لوڈ کریں
+        function loadExpenseEntries() {
+            const expenseEntries = [];
+            
+            // تمام اخراجات کی ڈیٹا جمع کریں
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('expenseData_')) {
+                    try {
+                        const data = JSON.parse(localStorage.getItem(key));
+                        expenseEntries.push({...data, key: key});
+                    } catch (error) {
+                        console.error('Error loading expense entry:', key, error);
+                    }
+                }
+            }
+            
+            // انٹریز کو تاریخ کے حساب سے ترتیب دیں
+            expenseEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            let entriesHTML = '';
+            
+            if (expenseEntries.length === 0) {
+                entriesHTML = '<p style="text-align: center; color: #636e72; font-size: 1rem; padding: 20px;">کوئی اخراجات کی انٹری دستیاب نہیں ہے</p>';
+            } else {
+                entriesHTML = `
+                    <h3 style="text-align: center; margin: 15px 0; color: #2d3436;">اخراجات کی تمام انٹریز</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="entries-table">
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>شاپ</th>
+                                    <th>شاپ کرایہ</th>
+                                    <th>بجلی کا بل</th>
+                                    <th>تنخواہ</th>
+                                    <th>خریدی گئی آئس کریم</th>
+                                    <th>خریدی گئی آئس کریم کی ادائیگی</th>
+                                    <th>دیگر اخراجات</th>
+                                    <th>ایکشنز</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                expenseEntries.forEach((entry, index) => {
+                    const date = new Date(entry.date).toLocaleDateString('ur-PK');
+                    const otherExpensesTotal = entry.expenses.otherExpenses ? 
+                        entry.expenses.otherExpenses.reduce((sum, exp) => sum + (exp.amount || 0), 0) : 0;
+                    const otherExpensesText = entry.expenses.otherExpenses ? 
+                        entry.expenses.otherExpenses.map(exp => `${exp.name}: ${exp.amount}`).join(', ') : '---';
+                    
+                    entriesHTML += `
+                        <tr>
+                            <td>${date}</td>
+                            <td>${entry.shopName}</td>
+                            <td>${entry.expenses.shopRent || 0} روپے</td>
+                            <td>${entry.expenses.electricityBill || 0} روپے</td>
+                            <td>${entry.expenses.salary || 0} روپے</td>
+                            <td>${entry.expenses.iceCreamPurchase || 0} روپے</td>
+                            <td>${entry.expenses.iceCreamPaid || 0} روپے</td>
+                            <td title="${otherExpensesText}">${otherExpensesTotal} روپے</td>
+                            <td>
+                                <button class="edit-entry-btn-small" onclick="openEditExpenseEntry('${entry.key}')">✏️</button>
+                                <button class="delete-entry-btn" onclick="secureDeleteExpenseEntry('${entry.key}')">🗑️</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                entriesHTML += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('expenseEntriesContent').innerHTML = entriesHTML;
+        }
+
+        // اخراجات انٹری ایڈٹ کھولیں
+        function openEditExpenseEntry(key) {
+            addPasswordCheck(function() {
+                const data = JSON.parse(localStorage.getItem(key));
+                if (!data) return;
+                
+                currentEditingExpenseEntry = key;
+                
+                document.getElementById('editExpenseDate').value = data.date.split('T')[0];
+                document.getElementById('editShopRent').value = data.expenses.shopRent || 0;
+                document.getElementById('editElectricityBill').value = data.expenses.electricityBill || 0;
+                document.getElementById('editSalary').value = data.expenses.salary || 0;
+                document.getElementById('editIceCreamPurchase').value = data.expenses.iceCreamPurchase || 0;
+                document.getElementById('editIceCreamPaid').value = data.expenses.iceCreamPaid || 0;
+                
+                // دیگر اخراجات کے فیلڈز سیٹ کریں
+                const container = document.getElementById('editOtherExpensesContainer');
+                container.innerHTML = '';
+                
+                if (data.expenses.otherExpenses && data.expenses.otherExpenses.length > 0) {
+                    data.expenses.otherExpenses.forEach((expense, index) => {
+                        const newField = `
+                            <div class="expense-item">
+                                <input type="text" class="expense-input" placeholder="خرچے کا نام" 
+                                       id="editExpenseName${index}" value="${expense.name || ''}">
+                                <input type="number" class="expense-input" placeholder="رقم" 
+                                       id="editExpenseAmount${index}" value="${expense.amount || 0}">
+                            </div>
+                        `;
+                        container.insertAdjacentHTML('beforeend', newField);
+                    });
+                    editExpenseCounter = data.expenses.otherExpenses.length;
+                } else {
+                    editExpenseCounter = 0;
+                    addEditExpenseField();
+                }
+                
+                document.getElementById('editExpenseModal').style.display = 'block';
+            }, 'خرچہ ایڈٹ');
+        }
+
+        function closeEditExpenseModal() {
+            document.getElementById('editExpenseModal').style.display = 'none';
+            currentEditingExpenseEntry = null;
+        }
+
+        // ایڈٹ اخراجات فیلڈ شامل کریں
+        function addEditExpenseField() {
+            const container = document.getElementById('editOtherExpensesContainer');
+            const newField = `
+                <div class="expense-item">
+                    <input type="text" class="expense-input" placeholder="خرچے کا نام" id="editExpenseName${editExpenseCounter}">
+                    <input type="number" class="expense-input" placeholder="رقم" id="editExpenseAmount${editExpenseCounter}">
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', newField);
+            editExpenseCounter++;
+        }
+
+        // اخراجات انٹری اپڈیٹ کریں
+        function updateExpenseEntry() {
+            if (!currentEditingExpenseEntry) return;
+            
+            const date = document.getElementById('editExpenseDate').value;
+            const shopRent = parseFloat(document.getElementById('editShopRent').value) || 0;
+            const electricityBill = parseFloat(document.getElementById('editElectricityBill').value) || 0;
+            const salary = parseFloat(document.getElementById('editSalary').value) || 0;
+            const iceCreamPurchase = parseFloat(document.getElementById('editIceCreamPurchase').value) || 0;
+            const iceCreamPaid = parseFloat(document.getElementById('editIceCreamPaid').value) || 0;
+            
+            if (!date) {
+                showError('براہ کرم تاریخ درج کریں');
+                return;
+            }
+            
+            try {
+                const data = JSON.parse(localStorage.getItem(currentEditingExpenseEntry));
+                
+                // دیگر اخراجات جمع کریں
+                const otherExpenses = [];
+                for (let i = 0; i < editExpenseCounter; i++) {
+                    const name = document.getElementById(`editExpenseName${i}`)?.value;
+                    const amount = parseFloat(document.getElementById(`editExpenseAmount${i}`)?.value) || 0;
+                    if (name && amount > 0) {
+                        otherExpenses.push({ name, amount });
+                    }
+                }
+                
+                // ڈیٹا اپڈیٹ کریں
+                data.date = date;
+                data.expenses = {
+                    shopRent,
+                    electricityBill,
+                    salary,
+                    iceCreamPurchase,
+                    iceCreamPaid,
+                    otherExpenses
+                };
+                
+                // لوکل اسٹوریج میں سیو کریں
+                localStorage.setItem(currentEditingExpenseEntry, JSON.stringify(data));
+                
+                // آئس کریم خریداری ڈیٹا کو ریفریش کریں
+                loadAllSavedData();
+                updateIceCreamPurchasePending();
+                
+                showSuccess('خرچہ کامیابی سے اپڈیٹ ہو گیا!');
+                closeEditExpenseModal();
+                closeExpenseEntriesModal();
+            } catch (error) {
+                showError('خرچہ اپڈیٹ کرنے میں مسئلہ ہوا: ' + error.message);
+            }
+        }
+
+        // اخراجات انٹری ڈیلیٹ کریں
+        function secureDeleteExpenseEntry(key) {
+            addPasswordCheck(function() {
+                if (confirm('کیا آپ واقعی یہ خرچہ انٹری ڈیلیٹ کرنا چاہتے ہیں؟')) {
+                    try {
+                        const data = JSON.parse(localStorage.getItem(key));
+                        
+                        // آئس کریم خریداری ڈیٹا سے ہٹائیں
+                        if (data.shop && data.expenses) {
+                            if (iceCreamPurchaseData[data.shop]) {
+                                iceCreamPurchaseData[data.shop].totalPurchase -= data.expenses.iceCreamPurchase || 0;
+                                iceCreamPurchaseData[data.shop].totalPaid -= data.expenses.iceCreamPaid || 0;
+                            }
+                        }
+                        
+                        localStorage.removeItem(key);
+                        
+                        showSuccess('خرچہ انٹری کامیابی سے ڈیلیٹ ہو گئی!');
+                        loadExpenseEntries();
+                        updateIceCreamPurchasePending();
+                    } catch (error) {
+                        showError('خرچہ انٹری ڈیلیٹ کرنے میں مسئلہ ہوا: ' + error.message);
+                    }
+                }
+            }, 'خرچہ ڈیلیٹ');
+        }
+
+        // ہینڈڈ اوور انٹری ایڈٹ کھولیں
+        function editHandedOverEntry(key) {
+            addPasswordCheck(function() {
+                const data = JSON.parse(localStorage.getItem(key));
+                if (!data) return;
+                
+                currentEditingHandedOverEntry = key;
+                
+                document.getElementById('editHandedOverDate').value = data.date;
+                document.getElementById('editHandedOverAmount').value = data.amount || 0;
+                document.getElementById('editHandedOverDescription').value = data.description || '';
+                
+                document.getElementById('editHandedOverModal').style.display = 'block';
+            }, 'ہینڈڈ اوور ایڈٹ');
+        }
+
+        function closeEditHandedOverModal() {
+            document.getElementById('editHandedOverModal').style.display = 'none';
+            currentEditingHandedOverEntry = null;
+        }
+
+        // ہینڈڈ اوور انٹری اپڈیٹ کریں - درست شدہ ورژن
+        function updateHandedOverEntry() {
+            if (!currentEditingHandedOverEntry) return;
+            
+            const date = document.getElementById('editHandedOverDate').value;
+            const amount = parseFloat(document.getElementById('editHandedOverAmount').value) || 0;
+            const description = document.getElementById('editHandedOverDescription').value || 'ہینڈڈ اوور';
+            
+            if (!date || amount <= 0) {
+                showError('براہ کرم درست تاریخ اور رقم درج کریں');
+                return;
+            }
+            
+            try {
+                const data = JSON.parse(localStorage.getItem(currentEditingHandedOverEntry));
+                
+                // ڈیٹا اپڈیٹ کریں
+                data.date = date;
+                data.amount = amount;
+                data.description = description;
+                data.shop = currentShop; // موجودہ شاپ کی معلومات شامل کریں
+                
+                // لوکل اسٹوریج میں سیو کریں
+                localStorage.setItem(currentEditingHandedOverEntry, JSON.stringify(data));
+                
+                // ہینڈڈ اوور ڈیٹا کو ریفریش کریں
+                loadAllSavedData();
+                updateSummary();
+                
+                showSuccess('ہینڈڈ اوور کامیابی سے اپڈیٹ ہو گیا!');
+                closeEditHandedOverModal();
+                toggleHandedOverDetails();
+            } catch (error) {
+                showError('ہینڈڈ اوور اپڈیٹ کرنے میں مسئلہ ہوا: ' + error.message);
+            }
+        }
+
+        // تمام ڈیلیٹ مودل کھولیں
+        function openDeleteAllModal() {
+            document.getElementById('deleteAllModal').style.display = 'block';
+            document.getElementById('deleteAllPassword').value = '';
+        }
+        
+        function closeDeleteAllModal() {
+            document.getElementById('deleteAllModal').style.display = 'none';
+        }
+        
+        // تمام ڈیٹا ڈیلیٹ کریں
+        function confirmDeleteAll() {
+            const password = document.getElementById('deleteAllPassword').value;
+            
+            if (password === SYSTEM_PASSWORD) {
+                if (confirm('کیا آپ واقعی تمام ڈیٹا ڈیلیٹ کرنا چاہتے ہیں؟ یہ عمل واپس نہیں ہو سکے گا!')) {
+                    showLoading(true);
+                    try {
+                        // تمام لوکل اسٹوریج ڈیٹا ڈیلیٹ کریں
+                        for (let i = 0; i < localStorage.length; i++) {
+                            const key = localStorage.key(i);
+                            if (key.startsWith('iceCreamData_') || key.startsWith('handedOver_') || key.startsWith('expenseData_')) {
+                                localStorage.removeItem(key);
+                            }
+                        }
+                        
+                        // تمام گلوبل ویری ایبلز ری سیٹ کریں
+                        allSavedData = [];
+                        handedOverData = [];
+                        iceCreamPurchaseData = {};
+                        expensesData = {};
+                        salesData = {};
+                        
+                        // تمام شاپس کے پرانے وزن ری سیٹ کریں
+                        Object.keys(shopsData).forEach(shopId => {
+                            shopsData[shopId].products.forEach(product => {
+                                product.oldWeight = 0;
+                            });
+                        });
+                        
+                        // موجودہ شاپ کا ڈیٹا ری لوڈ کریں
+                        loadShopData(currentShop);
+                        updateSummary();
+                        updateCurrentShopCash();
+                        
+                        showSuccess('تمام ڈیٹا کامیابی سے ڈیلیٹ ہو گیا!');
+                    } catch (error) {
+                        showError('ڈیٹا ڈیلیٹ کرنے میں مسئلہ ہوا: ' + error.message);
+                    } finally {
+                        showLoading(false);
+                        closeDeleteAllModal();
+                    }
+                }
+            } else {
+                showError('غلط پاس ورڈ!');
+            }
+        }
+        
+        // آئس کریم خریداری پینڈنگ اپڈیٹ کریں
+        function updateIceCreamPurchasePending() {
+            const shopData = iceCreamPurchaseData[currentShop] || { totalPurchase: 0, totalPaid: 0 };
+            const pending = shopData.totalPurchase - shopData.totalPaid;
+            
+            document.getElementById('iceCreamPending').textContent = pending + ' روپے';
+            document.getElementById('iceCreamPendingDisplay').textContent = pending + ' روپے';
+            
+            if (pending > 0) {
+                document.getElementById('iceCreamPendingDisplay').className = 'purchase-pending';
+            } else {
+                document.getElementById('iceCreamPendingDisplay').className = 'purchase-paid';
+            }
+        }
+        
+        // خودکار کیش کیلکولیشن - تمام سیل کی رقم جمع کر کے دکھائے
+        function autoCalculateCash() {
+            const totalSale = updateTotalSale();
+            document.getElementById('totalCash').value = totalSale;
+            updateCashComparison();
+        }
+        
+        // کیش موازنہ اپڈیٹ کریں
+        function updateCashComparison() {
+            const totalCash = parseFloat(document.getElementById('totalCash').value) || 0;
+            const totalSale = updateTotalSale();
+            
+            const difference = totalCash - totalSale;
+            const comparisonResult = document.getElementById('comparisonResult');
+            
+            if (totalCash === 0) {
+                comparisonResult.textContent = 'براہ کرم کیش درج کریں';
+                comparisonResult.className = 'comparison-result comparison-equal';
+            } else if (difference === 0) {
+                comparisonResult.textContent = '✅ کیش بالکل صحیح ہے';
+                comparisonResult.className = 'comparison-result comparison-equal';
+            } else if (difference > 0) {
+                comparisonResult.textContent = `➕ ${difference} روپے زیادہ ہیں`;
+                comparisonResult.className = 'comparison-result comparison-positive';
+            } else {
+                comparisonResult.textContent = `➖ ${Math.abs(difference)} روپے کم ہیں`;
+                comparisonResult.className = 'comparison-result comparison-negative';
+            }
+        }
+        
+        // خرچہ فیلڈ شامل کریں
+        function addExpenseField() {
+            const container = document.getElementById('otherExpensesContainer');
+            const newField = `
+                <div class="expense-item">
+                    <input type="text" class="expense-input" placeholder="خرچے کا نام" id="expenseName${expenseCounter}">
+                    <input type="number" class="expense-input" placeholder="رقم" id="expenseAmount${expenseCounter}">
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', newField);
+            expenseCounter++;
+        }
+        
+        // سارا ڈیٹا سیو کریں - اپڈیٹ شدہ ورژن
+        function saveAllData() {
+            try {
+                const totalCash = parseFloat(document.getElementById('totalCash').value) || 0;
+                const totalSale = updateTotalSale();
+                
+                // درست کیش ان ہینڈ کا حساب: کل سیل - اخراجات
+                const totalExpenses = calculateTotalExpenses();
+                const cashInHand = totalSale - totalExpenses;
+                
+                const saveData = {
+                    shop: currentShop,
+                    shopName: shopsData[currentShop].name,
+                    date: new Date().toISOString(),
+                    salesData: JSON.parse(JSON.stringify(salesData[currentShop])),
+                    totalSale: totalSale,
+                    totalCash: totalCash,
+                    expenses: expensesData[currentShop],
+                    cashInHand: cashInHand, // درست کیش ان ہینڈ
+                    timestamp: new Date().getTime(),
+                    type: 'sale'
+                };
+                
+                // ڈیٹا والیڈیشن
+                const validationErrors = validateSalesData(saveData);
+                if (validationErrors.length > 0) {
+                    showError('درج ذیل غلطیاں ہیں:\n' + validationErrors.join('\n'));
+                    return;
+                }
+                
+                // لوکل اسٹوریج میں سیو کریں
+                const key = `iceCreamData_${currentShop}_${new Date().getTime()}`;
+                localStorage.setItem(key, JSON.stringify(saveData));
+                
+                // تمام ڈیٹا کی فہرست میں شامل کریں
+                allSavedData.push(saveData);
+                
+                resetDataAfterSave();
+                updateSummary();
+                updateCurrentShopCash();
+                showNotification(`✅ ڈیٹا کامیابی سے سیو ہو گیا!\n\nشاپ: ${shopsData[currentShop].name}\nکل سیل: ${totalSale} گرام\nکیش ان ہینڈ: ${cashInHand} روپے`);
+            } catch (error) {
+                showError('ڈیٹا سیو کرنے میں مسئلہ ہوا: ' + error.message);
+            }
+        }
+        
+        // ڈیٹا کو ری سیٹ کریں سیو کے بعد
+        function resetDataAfterSave() {
+            const shop = shopsData[currentShop];
+            
+            // پرانا وزن کو موجودہ وزن سے اپڈیٹ کریں
+            shop.products.forEach((product, index) => {
+                if (salesData[currentShop] && salesData[currentShop][index]) {
+                    // موجودہ وزن کو نیا پرانا وزن بنائیں
+                    product.oldWeight = salesData[currentShop][index].currentWeight;
+                    
+                    // سیلز ڈیٹا میں بھی پرانا وزن اپڈیٹ کریں
+                    salesData[currentShop][index].oldWeight = salesData[currentShop][index].currentWeight;
+                }
+            });
+            
+            // تمام فیلڈز کو خالی کریں
+            document.querySelectorAll('.new-weight').forEach(input => {
+                input.value = '';
+            });
+            
+            document.querySelectorAll('.current-weight').forEach(input => {
+                input.value = '';
+            });
+            
+            // سیل کی رقم کو ری سیٹ کریں
+            document.querySelectorAll('[id^="soldAmount"]').forEach(span => {
+                span.textContent = '0';
+            });
+            
+            // کیش فیلڈز کو ری سیٹ کریں
+            document.getElementById('totalCash').value = '';
+            
+            // سیو بٹن کو ڈس ایبل کریں
+            document.getElementById('saveBtn').disabled = true;
+            
+            // پرانا وزن کو اپڈیٹ کریں UI میں
+            document.querySelectorAll('.old-weight').forEach((input, index) => {
+                if (shop.products[index]) {
+                    input.value = shop.products[index].oldWeight;
+                }
+            });
+            
+            // سیلز ڈیٹا کو ری سیٹ کریں (لیکن پرانا وزن کو برقرار رکھیں)
+            if (salesData[currentShop]) {
+                salesData[currentShop].forEach((product, index) => {
+                    product.newWeight = 0;
+                    product.currentWeight = 0;
+                    product.soldAmount = 0;
+                });
+            }
+            
+            // فوکس ری سیٹ کریں
+            currentFocusIndex = 0;
+            currentColumn = 0;
+            document.querySelectorAll('.current-input').forEach(el => {
+                el.classList.remove('current-input');
+            });
+            
+            updateCashComparison();
+        }
+        
+        // کل اخراجات کا حساب
+        function calculateTotalExpenses() {
+            const shopExpenses = expensesData[currentShop];
+            if (!shopExpenses) return 0;
+            
+            const fixedExpenses = shopExpenses.shopRent + shopExpenses.electricityBill + 
+                                shopExpenses.salary + shopExpenses.iceCreamPaid;
+            
+            let otherExpensesTotal = 0;
+            shopExpenses.otherExpenses.forEach(expense => {
+                otherExpensesTotal += expense.amount || 0;
+            });
+            
+            return fixedExpenses + otherExpensesTotal;
+        }
+        
+        // سمری اپڈیٹ کریں - درست شدہ ورژن
+        function updateSummary() {
+            let totalHandedOver = 0;
+            let currentCashInHand = 0;
+            
+            // ہینڈڈ اوور ڈیٹا کا حساب (صرف موجودہ شاپ کا)
+            handedOverData.forEach(item => {
+                if (!item.shop || item.shop === currentShop) {
+                    totalHandedOver += item.amount || 0;
+                }
+            });
+            
+            // موجودہ شاپ کا کیش ان ہینڈ جمع کریں
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('iceCreamData_')) {
+                    try {
+                        const data = JSON.parse(localStorage.getItem(key));
+                        if (data.shop === currentShop) {
+                            // درست کیش ان ہینڈ کا حساب: کل سیل - اخراجات
+                            const totalExpenses = calculateTotalExpensesForShop(data);
+                            currentCashInHand += (data.totalSale || 0) - totalExpenses;
+                        }
+                    } catch (error) {
+                        console.error('Error loading cash data:', key, error);
+                    }
+                }
+            }
+            
+            // ہینڈڈ اوور کیش کو منفی کریں (صرف موجودہ شاپ کا)
+            currentCashInHand -= totalHandedOver;
+            
+            document.getElementById('totalHandedOver').textContent = totalHandedOver + ' روپے';
+            document.getElementById('currentCashInHand').textContent = currentCashInHand + ' روپے';
+            
+            // آئس کریم خریداری پینڈنگ اپڈیٹ کریں
+            updateIceCreamPurchasePending();
+        }
+        
+        // مخصوص شاپ کے کل اخراجات کا حساب
+        function calculateTotalExpensesForShop(data) {
+            if (!data.expenses) return 0;
+            
+            const shopExpenses = data.expenses;
+            const fixedExpenses = (shopExpenses.shopRent || 0) + (shopExpenses.electricityBill || 0) + 
+                                (shopExpenses.salary || 0) + (shopExpenses.iceCreamPaid || 0);
+            
+            let otherExpensesTotal = 0;
+            if (shopExpenses.otherExpenses) {
+                shopExpenses.otherExpenses.forEach(expense => {
+                    otherExpensesTotal += expense.amount || 0;
+                });
+            }
+            
+            return fixedExpenses + otherExpensesTotal;
+        }
+        
+        // ہینڈڈ اوور ڈیٹیلز ٹوگل کریں - درست شدہ ورژن
+        function toggleHandedOverDetails() {
+            const handedOverDetails = document.getElementById('handedOverDetails');
+            const content = document.getElementById('handedOverDetailsContent');
+            
+            if (handedOverDetails.style.display === 'block') {
+                handedOverDetails.style.display = 'none';
+            } else {
+                let detailsHTML = '';
+                let currentShopHandedOver = handedOverData.filter(item => !item.shop || item.shop === currentShop);
+                
+                if (currentShopHandedOver.length === 0) {
+                    detailsHTML = '<p style="text-align: center; color: rgba(255,255,255,0.7); padding: 10px;">کوئی ہینڈڈ اوور ریکارڈ نہیں ہے</p>';
+                } else {
+                    currentShopHandedOver.forEach((item, index) => {
+                        const date = new Date(item.date).toLocaleDateString('ur-PK');
+                        detailsHTML += `
+                            <div class="handed-over-item">
+                                <div>
+                                    <span>${date}</span>
+                                    <span style="margin-right: 8px;">- ${item.description || 'ہینڈڈ اوور'}</span>
+                                </div>
+                                <div>
+                                    <button class="edit-entry-btn" onclick="editHandedOverEntry('${item.key}')">✏️</button>
+                                    <span>${item.amount} روپے</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                content.innerHTML = detailsHTML;
+                handedOverDetails.style.display = 'block';
+            }
+        }
+        
+        // ہینڈڈ اوور مودل کھولیں
+        function openHandedOverModal() {
+            document.getElementById('handedOverDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('handedOverAmount').value = '';
+            document.getElementById('handedOverDescription').value = '';
+            document.getElementById('handedOverModal').style.display = 'block';
+        }
+        
+        function closeHandedOverModal() {
+            document.getElementById('handedOverModal').style.display = 'none';
+        }
+        
+        // ہینڈڈ اوور جمع کریں - درست شدہ ورژن
+        function submitHandedOver() {
+            try {
+                const date = document.getElementById('handedOverDate').value;
+                const amount = parseFloat(document.getElementById('handedOverAmount').value) || 0;
+                const description = document.getElementById('handedOverDescription').value || 'ہینڈڈ اوور';
+                
+                if (!date || amount <= 0) {
+                    showError('براہ کرم درست تاریخ اور رقم درج کریں');
+                    return;
+                }
+                
+                const handedOverDataItem = {
+                    date: date,
+                    amount: amount,
+                    description: description,
+                    shop: currentShop, // موجودہ شاپ کی معلومات شامل کریں
+                    timestamp: new Date().getTime()
+                };
+                
+                const key = `handedOver_${currentShop}_${new Date().getTime()}`;
+                localStorage.setItem(key, JSON.stringify(handedOverDataItem));
+                
+                handedOverData.push({...handedOverDataItem, key: key});
+                handedOverData.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                showSuccess('ہینڈڈ اوور کیش کامیابی سے جمع ہو گیا!');
+                closeHandedOverModal();
+                updateSummary();
+                updateCurrentShopCash();
+                toggleHandedOverDetails();
+            } catch (error) {
+                showError('ہینڈڈ اوور جمع کرنے میں مسئلہ ہوا: ' + error.message);
+            }
+        }
+        
+        // وزن ایڈٹ مودل فنکشنز
+        function openEditWeightModal(index) {
+            currentEditingProductIndex = index;
+            document.getElementById('editWeightModal').style.display = 'block';
+            document.getElementById('editWeightPassword').value = '';
+        }
+        
+        function closeEditWeightModal() {
+            document.getElementById('editWeightModal').style.display = 'none';
+            currentEditingProductIndex = -1;
+        }
+        
+        function confirmEditWeight() {
+            const password = document.getElementById('editWeightPassword').value;
+            
+            if (password === SYSTEM_PASSWORD) {
+                const newWeight = prompt('نیا پرانا وزن درج کریں (گرام میں):');
+                if (newWeight !== null && !isNaN(newWeight)) {
+                    const weightValue = parseFloat(newWeight);
+                    shopsData[currentShop].products[currentEditingProductIndex].oldWeight = weightValue;
+                    salesData[currentShop][currentEditingProductIndex].oldWeight = weightValue;
+                    
+                    // UI اپڈیٹ کریں
+                    document.querySelectorAll('.old-weight')[currentEditingProductIndex].value = weightValue;
+                    
+                    showSuccess('پرانا وزن کامیابی سے تبدیل ہو گیا!');
+                    closeEditWeightModal();
+                }
+            } else {
+                showError('غلط پاس ورڈ!');
+            }
+        }
+        
+        // نئی شاپ ایڈ کرنے کا سسٹم
+        function openAddShopModal() {
+            addPasswordCheck(function() {
+                document.getElementById('addShopModal').style.display = 'block';
+                document.getElementById('newShopName').value = '';
+                document.getElementById('newShopId').value = '';
+            }, 'نئی شاپ شامل کرنا');
+        }
+        
+        function closeAddShopModal() {
+            document.getElementById('addShopModal').style.display = 'none';
+        }
+        
+        function addNewShop() {
+            const shopName = document.getElementById('newShopName').value;
+            const shopId = document.getElementById('newShopId').value;
+            
+            if (!shopName || !shopId) {
+                showError('براہ کرم شاپ کا نام اور آئی ڈی درج کریں');
+                return;
+            }
+            
+            if (shopsData[shopId]) {
+                showError('یہ شاپ آئی ڈی پہلے سے موجود ہے');
+                return;
+            }
+            
+            // نئی شاپ شامل کریں
+            shopsData[shopId] = {
+                name: shopName,
+                products: JSON.parse(JSON.stringify(shopsData.delhi.products)) // ڈیفالٹ پراڈکٹس
+            };
+            
+            // شاپ سلیکٹر اپڈیٹ کریں
+            updateShopSelector();
+            
+            showSuccess('نئی شاپ کامیابی سے شامل ہو گئی!');
+            closeAddShopModal();
+        }
+        
+        // مودل فنکشنز
+        function openExpenseModal() {
+            document.getElementById('expenseShopName').textContent = shopsData[currentShop].name;
+            document.getElementById('expenseModal').style.display = 'block';
+        }
+        
+        function closeExpenseModal() {
+            document.getElementById('expenseModal').style.display = 'none';
+        }
+        
+        function openReportModal() {
+            document.getElementById('reportModal').style.display = 'block';
+            // رپورٹ مودل کھلتے ہی تازہ رپورٹ دکھائیں
+            generateReport();
+        }
+        
+        function closeReportModal() {
+            document.getElementById('reportModal').style.display = 'none';
+        }
+        
+        // خرچہ مودل میں تبدیلی - خرچہ جمع کرنے پر فوری اپڈیٹ
+        document.getElementById('expenseModal').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitExpenses();
+        });
+        
+        // رپورٹ بنائیں
+        function generateReport() {
+            try {
+                const shop = document.getElementById('reportShop').value;
+                const fromDate = document.getElementById('reportFromDate').value;
+                const toDate = document.getElementById('reportToDate').value;
+                const reportType = document.getElementById('reportType').value;
+                
+                // تمام ڈیٹا جمع کریں
+                let allReportData = [];
+                
+                // سیلز ڈیٹا
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('iceCreamData_')) {
+                        try {
+                            const data = JSON.parse(localStorage.getItem(key));
+                            allReportData.push(data);
+                        } catch (error) {
+                            console.error('Error loading sales data:', key, error);
+                        }
+                    } else if (key.startsWith('expenseData_')) {
+                        try {
+                            const data = JSON.parse(localStorage.getItem(key));
+                            allReportData.push(data);
+                        } catch (error) {
+                            console.error('Error loading expense data:', key, error);
+                        }
+                    }
+                }
+                
+                // ہینڈڈ اوور ڈیٹا
+                handedOverData.forEach(item => {
+                    item.type = 'handedOver';
+                    allReportData.push(item);
+                });
+                
+                // فلٹر ڈیٹا
+                let filteredData = allReportData;
+                
+                if (shop !== 'all') {
+                    filteredData = filteredData.filter(data => data.shop === shop);
+                }
+                
+                if (fromDate) {
+                    filteredData = filteredData.filter(data => new Date(data.date) >= new Date(fromDate));
+                }
+                
+                if (toDate) {
+                    filteredData = filteredData.filter(data => new Date(data.date) <= new Date(toDate));
+                }
+                
+                // رپورٹ بنائیں
+                let reportHTML = `
+                    <h3 style="text-align: center; margin: 15px 0; color: #2d3436;">
+                        ${reportType === 'daily' ? 'روزانہ' : reportType === 'weekly' ? 'ہفتہ وار' : reportType === 'monthly' ? 'ماہانہ' : 'سالانہ'} رپورٹ
+                    </h3>
+                    <p style="text-align: center; margin-bottom: 15px; color: #636e72;">
+                        ${shop === 'all' ? 'تمام شاپس' : shopsData[shop].name}
+                    </p>
+                `;
+                
+                if (filteredData.length === 0) {
+                    reportHTML += `<p style="text-align: center; color: #636e72; font-size: 1rem; padding: 20px;">کوئی ڈیٹا دستیاب نہیں ہے</p>`;
+                } else {
+                    // مجموعی حساب کتاب
+                    let totalShopRent = 0;
+                    let totalElectricity = 0;
+                    let totalSalary = 0;
+                    let totalIceCreamPurchase = 0;
+                    let totalIceCreamPaid = 0;
+                    let totalOtherExpenses = 0;
+                    let totalHandedOver = 0;
+                    let totalCashInHand = 0;
+                    let totalSales = 0;
+                    
+                    filteredData.forEach(data => {
+                        if (data.type === 'sale') {
+                            totalSales += data.totalSale || 0;
+                            totalCashInHand += data.cashInHand || 0;
+                        } else if (data.type === 'expense' && data.expenses) {
+                            totalShopRent += data.expenses.shopRent || 0;
+                            totalElectricity += data.expenses.electricityBill || 0;
+                            totalSalary += data.expenses.salary || 0;
+                            totalIceCreamPurchase += data.expenses.iceCreamPurchase || 0;
+                            totalIceCreamPaid += data.expenses.iceCreamPaid || 0;
+                            
+                            if (data.expenses.otherExpenses) {
+                                data.expenses.otherExpenses.forEach(expense => {
+                                    totalOtherExpenses += expense.amount || 0;
+                                });
+                            }
+                        } else if (data.type === 'handedOver') {
+                            totalHandedOver += data.amount || 0;
+                        }
+                    });
+                    
+                    const totalExpenses = totalShopRent + totalElectricity + totalSalary + totalIceCreamPaid + totalOtherExpenses;
+                    const netCashInHand = totalCashInHand - totalHandedOver;
+                    const profitLoss = totalSales - totalExpenses;
+                    const iceCreamPending = totalIceCreamPurchase - totalIceCreamPaid;
+                    
+                    reportHTML += `
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                            <h4 style="text-align: center; margin-bottom: 12px; color: #2d3436;">مجموعی رپورٹ</h3>
+                            <div style="overflow-x: auto;">
+                                <table class="report-table">
+                                    <tr>
+                                        <th>کل سیل</th>
+                                        <td>${totalSales} گرام</td>
+                                    </tr>
+                                    <tr>
+                                        <th>کل اخراجات</th>
+                                        <td>${totalExpenses} روپے</td>
+                                    </tr>
+                                    <tr>
+                                        <th>شاپ کرایہ</th>
+                                        <td>${totalShopRent} روپے</td>
+                                    </tr>
+                                    <tr>
+                                        <th>بجلی کا بل</th>
+                                        <td>${totalElectricity} روپے</td>
+                                    </tr>
+                                    <tr>
+                                        <th>ملازم کی تنخواہ</th>
+                                        <td>${totalSalary} روپے</td>
+                                    </tr>
+                                    <tr>
+                                        <th>خریدی گئی آئس کریم (کل)</th>
+                                        <td>${totalIceCreamPurchase} روپے</td>
+                                    </tr>
+                                    <tr>
+                                        <th>خریدی گئی آئس کریم کی ادائیگی</th>
+                                        <td>${totalIceCreamPaid} روپے</td>
+                                    </tr>
+                                    <tr>
+                                        <th>خریدی گئی آئس کریم کی ادائیگی پینڈنگ</th>
+                                        <td class="${iceCreamPending > 0 ? 'profit-negative' : 'profit-positive'}">${iceCreamPending} روپے</td>
+                                    </tr>
+                                    <tr>
+                                        <th>دیگر اخراجات</th>
+                                        <td>${totalOtherExpenses} روپے</td>
+                                    </tr>
+                                    <tr>
+                                        <th>ہینڈڈ اوور کیش</th>
+                                        <td>${totalHandedOver} روپے</td>
+                                    </tr>
+                                    <tr>
+                                        <th>کیش ان ہینڈ</th>
+                                        <td>${netCashInHand} روپے</td>
+                                    </tr>
+                                    <tr>
+                                        <th>منافع/نقصان</th>
+                                        <td class="${profitLoss >= 0 ? 'profit-positive' : 'profit-negative'}">
+                                            ${profitLoss} روپے
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // تفصیلی اخراجات رپورٹ
+                    reportHTML += generateDetailedExpenseReport();
+                }
+                
+                document.getElementById('reportContent').innerHTML = reportHTML;
+            } catch (error) {
+                showError('رپورٹ بنانے میں مسئلہ ہوا: ' + error.message);
+            }
+        }
+        
+        // تفصیلی اخراجات رپورٹ
+        function generateDetailedExpenseReport() {
+            let reportHTML = '<h3 style="text-align: center; margin: 15px 0; color: #2d3436;">تفصیلی اخراجات رپورٹ</h3>';
+            
+            const expenseEntries = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('expenseData_')) {
+                    try {
+                        const data = JSON.parse(localStorage.getItem(key));
+                        expenseEntries.push(data);
+                    } catch (error) {
+                        console.error('Error loading expense data:', key, error);
+                    }
+                }
+            }
+            
+            expenseEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (expenseEntries.length === 0) {
+                reportHTML += '<p style="text-align: center; color: #636e72;">کوئی اخراجات کی انٹری نہیں ہے</p>';
+            } else {
+                expenseEntries.forEach(entry => {
+                    const date = new Date(entry.date).toLocaleDateString('ur-PK');
+                    reportHTML += `
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                            <h4 style="color: #2d3436; margin-bottom: 10px;">${date} - ${entry.shopName}</h4>
+                            <table class="report-table" style="width: 100%;">
+                                <tr>
+                                    <th>خرچے کا نام</th>
+                                    <th>رقم</th>
+                                </tr>
+                                <tr>
+                                    <td>شاپ کرایہ</td>
+                                    <td>${entry.expenses.shopRent || 0} روپے</td>
+                                </tr>
+                                <tr>
+                                    <td>بجلی کا بل</td>
+                                    <td>${entry.expenses.electricityBill || 0} روپے</td>
+                                </tr>
+                                <tr>
+                                    <td>ملازم کی تنخواہ</td>
+                                    <td>${entry.expenses.salary || 0} روپے</td>
+                                </tr>
+                                <tr>
+                                    <td>خریدی گئی آئس کریم</td>
+                                    <td>${entry.expenses.iceCreamPurchase || 0} روپے</td>
+                                </tr>
+                                <tr>
+                                    <td>خریدی گئی آئس کریم کی ادائیگی</td>
+                                    <td>${entry.expenses.iceCreamPaid || 0} روپے</td>
+                                </tr>
+                    `;
+                    
+                    // دیگر اخراجات
+                    if (entry.expenses.otherExpenses && entry.expenses.otherExpenses.length > 0) {
+                        entry.expenses.otherExpenses.forEach(expense => {
+                            reportHTML += `
+                                <tr>
+                                    <td>${expense.name}</td>
+                                    <td>${expense.amount} روپے</td>
+                                </tr>
+                            `;
+                        });
+                    }
+                    
+                    reportHTML += `
+                            </table>
+                        </div>
+                    `;
+                });
+            }
+            
+            return reportHTML;
+        }
+        
+        // PDF ایکسپورٹ فنکشن - بہتر شدہ
+        function exportToPDF() {
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // رائٹ ٹو لیفٹ سپورٹ کے لیے
+                doc.setLanguage('ur');
+                
+                // عنوان
+                doc.setFontSize(20);
+                doc.text('آئس کریم سیلز رپورٹ', 105, 15, { align: 'center' });
+                
+                // تاریخ
+                const currentDate = new Date().toLocaleDateString('ur-PK');
+                doc.setFontSize(12);
+                doc.text(`تاریخ: ${currentDate}`, 105, 25, { align: 'center' });
+                
+                let yPosition = 40;
+                
+                // تمام ڈیٹا جمع کریں
+                const allData = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('iceCreamData_') || key.startsWith('expenseData_')) {
+                        try {
+                            const data = JSON.parse(localStorage.getItem(key));
+                            allData.push(data);
+                        } catch (error) {
+                            console.error('Error loading data:', key, error);
+                        }
+                    }
+                }
+                
+                // ڈیٹا کو تاریخ کے حساب سے ترتیب دیں
+                allData.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // سیلز ڈیٹا
+                doc.setFontSize(16);
+                doc.text('سیلز انٹریز', 105, yPosition, { align: 'center' });
+                yPosition += 10;
+                
+                const salesData = allData.filter(data => data.type === 'sale');
+                
+                if (salesData.length === 0) {
+                    doc.setFontSize(12);
+                    doc.text('کوئی سیلز انٹری نہیں ہے', 105, yPosition, { align: 'center' });
+                    yPosition += 10;
+                } else {
+                    salesData.forEach((entry, index) => {
+                        if (yPosition > 270) {
+                            doc.addPage();
+                            yPosition = 20;
+                        }
+                        
+                        const date = new Date(entry.date).toLocaleDateString('ur-PK');
+                        doc.setFontSize(10);
+                        doc.text(`${date} - ${entry.shopName}`, 14, yPosition);
+                        doc.text(`کل سیل: ${entry.totalSale} گرام`, 14, yPosition + 5);
+                        doc.text(`کل کیش: ${entry.totalCash} روپے`, 14, yPosition + 10);
+                        doc.text(`کیش ان ہینڈ: ${entry.cashInHand || 0} روپے`, 14, yPosition + 15);
+                        yPosition += 25;
+                    });
+                }
+                
+                // اخراجات ڈیٹا
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+                
+                doc.setFontSize(16);
+                doc.text('اخراجات انٹریز', 105, yPosition, { align: 'center' });
+                yPosition += 10;
+                
+                const expenseData = allData.filter(data => data.type === 'expense');
+                
+                if (expenseData.length === 0) {
+                    doc.setFontSize(12);
+                    doc.text('کوئی اخراجات انٹری نہیں ہے', 105, yPosition, { align: 'center' });
+                } else {
+                    expenseData.forEach((entry, index) => {
+                        if (yPosition > 270) {
+                            doc.addPage();
+                            yPosition = 20;
+                        }
+                        
+                        const date = new Date(entry.date).toLocaleDateString('ur-PK');
+                        doc.setFontSize(8);
+                        doc.text(`${date} - ${entry.shopName}`, 14, yPosition);
+                        doc.text(`شاپ کرایہ: ${entry.expenses.shopRent || 0}`, 14, yPosition + 4);
+                        doc.text(`بجلی: ${entry.expenses.electricityBill || 0}`, 14, yPosition + 8);
+                        doc.text(`تنخواہ: ${entry.expenses.salary || 0}`, 14, yPosition + 12);
+                        doc.text(`خریدی گئی آئس کریم: ${entry.expenses.iceCreamPurchase || 0}`, 14, yPosition + 16);
+                        doc.text(`خریدی گئی آئس کریم کی ادائیگی: ${entry.expenses.iceCreamPaid || 0}`, 14, yPosition + 20);
+                        
+                        // دیگر اخراجات
+                        if (entry.expenses.otherExpenses && entry.expenses.otherExpenses.length > 0) {
+                            entry.expenses.otherExpenses.forEach((expense, expIndex) => {
+                                doc.text(`${expense.name}: ${expense.amount}`, 14, yPosition + 24 + (expIndex * 4));
+                            });
+                            yPosition += 24 + (entry.expenses.otherExpenses.length * 4);
+                        } else {
+                            yPosition += 24;
+                        }
+                        
+                        yPosition += 10;
+                    });
+                }
+                
+                // PDF ڈاؤن لوڈ
+                doc.save('icecream-sales-report.pdf');
+                showSuccess('PDF رپورٹ ڈاؤن لوڈ ہو گئی!');
+            } catch (error) {
+                showError('PDF بنانے میں مسئلہ ہوا: ' + error.message);
+            }
+        }
+        
+        // ایکسل ایکسپورٹ فنکشن
+        function exportToExcel() {
+            try {
+                // تمام ڈیٹا جمع کریں
+                const allData = [];
+                
+                // سیلز ڈیٹا
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('iceCreamData_')) {
+                        try {
+                            const data = JSON.parse(localStorage.getItem(key));
+                            allData.push({
+                                قسم: 'سیلز',
+                                تاریخ: new Date(data.date).toLocaleDateString('ur-PK'),
+                                شاپ: data.shopName,
+                                'کل سیل': data.totalSale,
+                                'کل کیش': data.totalCash,
+                                'کیش ان ہینڈ': data.cashInHand || 0
+                            });
+                        } catch (error) {
+                            console.error('Error loading sales data:', key, error);
+                        }
+                    } else if (key.startsWith('expenseData_')) {
+                        try {
+                            const data = JSON.parse(localStorage.getItem(key));
+                            const expenseRow = {
+                                قسم: 'اخراجات',
+                                تاریخ: new Date(data.date).toLocaleDateString('ur-PK'),
+                                شاپ: data.shopName,
+                                'شاپ کرایہ': data.expenses.shopRent || 0,
+                                'بجلی کا بل': data.expenses.electricityBill || 0,
+                                'ملازم کی تنخواہ': data.expenses.salary || 0,
+                                'خریدی گئی آئس کریم': data.expenses.iceCreamPurchase || 0,
+                                'خریدی گئی آئس کریم کی ادائیگی': data.expenses.iceCreamPaid || 0
+                            };
+                            
+                            // دیگر اخراجات
+                            if (data.expenses.otherExpenses && data.expenses.otherExpenses.length > 0) {
+                                data.expenses.otherExpenses.forEach((expense, index) => {
+                                    expenseRow[`خرچہ ${index + 1}`] = `${expense.name}: ${expense.amount}`;
+                                });
+                            }
+                            
+                            allData.push(expenseRow);
+                        } catch (error) {
+                            console.error('Error loading expense data:', key, error);
+                        }
+                    }
+                }
+                
+                if (allData.length === 0) {
+                    showError('ایکسپورٹ کے لیے کوئی ڈیٹا نہیں ہے');
+                    return;
+                }
+                
+                // ایکسل شیٹ بنائیں
+                const ws = XLSX.utils.json_to_sheet(allData);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'سیلز رپورٹ');
+                
+                // ایکسل فائل ڈاؤن لوڈ کریں
+                XLSX.writeFile(wb, 'icecream-sales-report.xlsx');
+                showSuccess('ایکسل رپورٹ ڈاؤن لوڈ ہو گئی!');
+            } catch (error) {
+                showError('ایکسل بنانے میں مسئلہ ہوا: ' + error.message);
+            }
+        }
+        
+        // پرنٹ رپورٹ
+        function printReport() {
+            const reportContent = document.getElementById('reportContent').innerHTML;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>آئس کریم سیلز رپورٹ</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; direction: rtl; }
+                            table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+                            th, td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+                            th { background-color: #f2f2f2; }
+                            .profit-positive { color: green; font-weight: bold; }
+                            .profit-negative { color: red; font-weight: bold; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1 style="text-align: center;">آئس کریم سیلز رپورٹ</h1>
+                        ${reportContent}
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+        
+        // آٹو سیو فیچر کو ختم کیا گیا - اب صرف مینول سیو ہوگا
+        
+        // ان پٹ فیلڈز میں انٹر کی پریس ہونے پر لاگ ان
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+        
+        // وزن ایڈٹ پاس ورڈ فیلڈ میں انٹر کی پریس ہونے پر تصدیق
+        document.getElementById('editWeightPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                confirmEditWeight();
+            }
+        });
+        
+        // تمام ڈیلیٹ پاس ورڈ فیلڈ میں انٹر کی پریس ہونے پر تصدیق
+        document.getElementById('deleteAllPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                confirmDeleteAll();
+            }
+        });
+
+        // ابتدائی لوڈنگ
+        window.addEventListener('load', function() {
+            updateCurrentDate();
+        });
+    </script>
 </body>
 </html>
